@@ -124,7 +124,9 @@ jobs:
               sudo systemctl start docker
               sudo systemctl enable docker
             fi
+            mkdir -p ~/app
             cd ~/app
+            mv -f ~/app/base.env ~/app/.env 2>/dev/null || true
             echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" > .env.ghcr
             sudo docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
             sudo docker-compose pull
