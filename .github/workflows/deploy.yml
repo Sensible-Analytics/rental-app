@@ -131,3 +131,24 @@ jobs:
             sudo docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
             sudo docker-compose pull
             sudo docker-compose up -d
+
+      - name: Post-Deployment Healthcheck
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.INSTANCE_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "Waiting for app to be healthy..."
+            for i in {1..20}; do
+              if curl -s -f http://localhost:8080/landlord > /dev/null; then
+                echo "App is healthy!"
+                exit 0
+              fi
+              echo "Still waiting... ($i/20)"
+              sleep 10
+            done
+            echo "App failed to become healthy."
+            sudo docker-compose ps
+            sudo docker-compose logs --tail 50
+            exit 1
