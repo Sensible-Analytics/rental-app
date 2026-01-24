@@ -85,7 +85,7 @@ resource "oci_core_default_security_list" "mre_security_list" {
 resource "oci_core_instance" "mre_instance" {
   availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
   compartment_id      = var.compartment_ocid
-  display_name        = "mre-instance"
+  display_name        = "rental-app-instance"
   shape               = "VM.Standard.E2.1.Micro"
 
   create_vnic_details {

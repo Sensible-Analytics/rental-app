@@ -42,31 +42,31 @@ jobs:
       matrix:
         include:
           - appname: gateway
-            image: ghcr.io/${{ github.repository_owner }}/microrealestate/gateway
+            image: ghcr.io/sensible-analytics/rental-app/gateway
             dockerfile: services/gateway/Dockerfile
           - appname: api
-            image: ghcr.io/${{ github.repository_owner }}/microrealestate/api
+            image: ghcr.io/sensible-analytics/rental-app/api
             dockerfile: services/api/Dockerfile
           - appname: tenantapi
-            image: ghcr.io/${{ github.repository_owner }}/microrealestate/tenantapi
+            image: ghcr.io/sensible-analytics/rental-app/tenantapi
             dockerfile: services/tenantapi/Dockerfile
           - appname: authenticator
-            image: ghcr.io/${{ github.repository_owner }}/microrealestate/authenticator
+            image: ghcr.io/sensible-analytics/rental-app/authenticator
             dockerfile: services/authenticator/Dockerfile
           - appname: pdfgenerator
-            image: ghcr.io/${{ github.repository_owner }}/microrealestate/pdfgenerator
+            image: ghcr.io/sensible-analytics/rental-app/pdfgenerator
             dockerfile: services/pdfgenerator/Dockerfile
           - appname: emailer
-            image: ghcr.io/${{ github.repository_owner }}/microrealestate/emailer
+            image: ghcr.io/sensible-analytics/rental-app/emailer
             dockerfile: services/emailer/Dockerfile
           - appname: resetservice
-            image: ghcr.io/${{ github.repository_owner }}/microrealestate/resetservice
+            image: ghcr.io/sensible-analytics/rental-app/resetservice
             dockerfile: services/resetservice/Dockerfile
           - appname: landlord-frontend
-            image: ghcr.io/${{ github.repository_owner }}/microrealestate/landlord-frontend
+            image: ghcr.io/sensible-analytics/rental-app/landlord-frontend
             dockerfile: webapps/landlord/Dockerfile
           - appname: tenant-frontend
-            image: ghcr.io/${{ github.repository_owner }}/microrealestate/tenant-frontend
+            image: ghcr.io/sensible-analytics/rental-app/tenant-frontend
             dockerfile: webapps/tenant/Dockerfile
 
     steps:

@@ -1,5 +1,5 @@
 {
-  "name": "microrealestate",
+  "name": "rental-app",
   "version": "1.0.0-alpha.1",
   "description": "The application which helps the landlords to manage their property rents.",
   "private": true,

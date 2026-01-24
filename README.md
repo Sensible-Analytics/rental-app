@@ -1,8 +1,8 @@
-# MicroRealEstate
+# rental-app
 
-[![Continuous Integration](https://github.com/microrealestate/microrealestate/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/microrealestate/microrealestate/actions/workflows/ci.yml)
+[![Continuous Integration](https://github.com/Sensible-Analytics/rental-app/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/Sensible-Analytics/rental-app/actions/workflows/ci.yml)
 
-MicroRealEstate is an open-source application designed to assist landlords in managing their properties and rentals. MicroRealEstate (MRE) serves as a centralized platform for landlords to streamline their property management tasks.
+rental-app is an open-source application designed to assist landlords in managing their properties and rentals. rental-app serves as a centralized platform for landlords to streamline their property management tasks.
 
 ## Key Features
 
