@@ -15,6 +15,9 @@ import NumberFormat from '../../../components/NumberFormat';
 import { observer } from 'mobx-react-lite';
 import Page from '../../../components/Page';
 import PropertyForm from '../../../components/properties/PropertyForm';
+import PropertyFinance from '../../../components/properties/PropertyFinance';
+import PropertyCommunication from '../../../components/properties/PropertyCommunication';
+import PropertyDocuments from '../../../components/properties/PropertyDocuments';
 import ShortcutButton from '../../../components/ShortcutButton';
 import { StoreContext } from '../../../store';
 import { toast } from 'sonner';
@@ -130,7 +133,24 @@ function Property() {
       let property = {
         ...toJS(store.property.selected),
         ...propertyPart,
-        price: propertyPart.rent
+        price: propertyPart.rent,
+        financialConfigs: propertyPart.financialConfigs
+          ? {
+              ...propertyPart.financialConfigs,
+              incomeKeywords: propertyPart.financialConfigs.incomeKeywords
+                ? propertyPart.financialConfigs.incomeKeywords
+                    .split(',')
+                    .map((s) => s.trim())
+                    .filter(Boolean)
+                : [],
+              expenseKeywords: propertyPart.financialConfigs.expenseKeywords
+                ? propertyPart.financialConfigs.expenseKeywords
+                    .split(',')
+                    .map((s) => s.trim())
+                    .filter(Boolean)
+                : []
+            }
+          : undefined
       };
 
       if (property._id) {
@@ -199,11 +219,29 @@ function Property() {
               <TabsTrigger value="property" className="w-1/2">
                 {t('Property')}
               </TabsTrigger>
+              <TabsTrigger value="finance" className="w-1/2">
+                {t('Finance')}
+              </TabsTrigger>
+              <TabsTrigger value="communication" className="w-1/2">
+                {t('Communication')}
+              </TabsTrigger>
+              <TabsTrigger value="documents" className="w-1/2">
+                {t('Documents')}
+              </TabsTrigger>
             </TabsList>
             <TabsContent value="property">
               <Card className="p-6">
                 <PropertyForm onSubmit={onSubmit} />
               </Card>
+            </TabsContent>
+            <TabsContent value="finance">
+              <PropertyFinance property={store.property.selected} />
+            </TabsContent>
+            <TabsContent value="communication">
+              <PropertyCommunication property={store.property.selected} />
+            </TabsContent>
+            <TabsContent value="documents">
+              <PropertyDocuments property={store.property.selected} />
             </TabsContent>
           </Tabs>
           <div className="hidden md:grid grid-cols-1 gap-4 h-fit">

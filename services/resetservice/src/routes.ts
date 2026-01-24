@@ -10,10 +10,8 @@ routes.delete(
       await Promise.all(
         [
           'accounts',
-          'contracts',
           'documents',
           'emails',
-          'landloards',
           'leases',
           'occupants',
           'properties',

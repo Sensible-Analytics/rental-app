@@ -29,7 +29,16 @@ const validationSchema = Yup.object().shape({
     state: Yup.string(),
     country: Yup.string()
   }),
-  rent: Yup.number().min(0).required()
+  rent: Yup.number().min(0).required(),
+  managerEmail: Yup.string().email(),
+  managerWhatsApp: Yup.string(),
+  localFolderPath: Yup.string(),
+  financialConfigs: Yup.object().shape({
+    loanAmount: Yup.number().min(0),
+    interestRate: Yup.number().min(0),
+    incomeKeywords: Yup.string(),
+    expenseKeywords: Yup.string()
+  })
 });
 
 const PropertyForm = observer(({ onSubmit }) => {
@@ -52,7 +61,16 @@ const PropertyForm = observer(({ onSubmit }) => {
         state: '',
         country: ''
       },
-      rent: store.property.selected?.price || ''
+      rent: store.property.selected?.price || '',
+      managerEmail: store.property.selected?.managerEmail || '',
+      managerWhatsApp: store.property.selected?.managerWhatsApp || '',
+      localFolderPath: store.property.selected?.localFolderPath || '',
+      financialConfigs: {
+        loanAmount: store.property.selected?.financialConfigs?.loanAmount || '',
+        interestRate: store.property.selected?.financialConfigs?.interestRate || '',
+        incomeKeywords: (store.property.selected?.financialConfigs?.incomeKeywords || []).join(', '),
+        expenseKeywords: (store.property.selected?.financialConfigs?.expenseKeywords || []).join(', ')
+      }
     }),
     [store.property.selected]
   );
@@ -106,10 +124,27 @@ const PropertyForm = observer(({ onSubmit }) => {
             <Section label={t('Address')}>
               <AddressField />
             </Section>
-            <Section label={t('Rent')}>
-              <NumberField
-                label={t('Rent excluding tax and expenses')}
-                name="rent"
+            <Section label={t('Integrations')}>
+              <div className="sm:flex sm:gap-2">
+                <TextField label={t('Manager/Tenant Email')} name="managerEmail" />
+                <TextField label={t('WhatsApp Number')} name="managerWhatsApp" />
+              </div>
+              <TextField label={t('Local Folder Path')} name="localFolderPath" />
+            </Section>
+            <Section label={t('Financing & Reconciliation')}>
+              <div className="sm:flex sm:gap-2">
+                <NumberField label={t('Loan Amount')} name="financialConfigs.loanAmount" />
+                <NumberField label={t('Interest Rate (%)')} name="financialConfigs.interestRate" />
+              </div>
+              <TextField
+                label={t('Income Keywords (comma-separated)')}
+                name="financialConfigs.incomeKeywords"
+                placeholder="RENT, COOPER"
+              />
+              <TextField
+                label={t('Expense Keywords (comma-separated)')}
+                name="financialConfigs.expenseKeywords"
+                placeholder="INTEREST, WESTPAC"
               />
             </Section>
             <SubmitButton

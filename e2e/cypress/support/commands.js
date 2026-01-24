@@ -12,8 +12,8 @@ Cypress.Commands.add('resetAppData', () => {
 
 Cypress.Commands.add('signIn', ({ email, password }) => {
   cy.visit('/signin');
-  cy.get('input[name=email]').type(email);
-  cy.get('input[name=password]').type(password);
+  cy.get('input[name=email]').clear().type(email);
+  cy.get('input[name=password]').clear().type(password);
   cy.get('[data-cy=submit]').click();
 });
 
@@ -24,10 +24,10 @@ Cypress.Commands.add('signOut', () => {
 
 Cypress.Commands.add('signUp', ({ firstName, lastName, email, password }) => {
   cy.visit('/signup');
-  cy.get('input[name=firstName]').type(firstName);
-  cy.get('input[name=lastName]').type(lastName);
-  cy.get('input[name=email]').type(email);
-  cy.get('input[name=password]').type(password);
+  cy.get('input[name=firstName]').clear().type(firstName);
+  cy.get('input[name=lastName]').clear().type(lastName);
+  cy.get('input[name=email]').clear().type(email);
+  cy.get('input[name=password]').clear().type(password);
   cy.get('[data-cy=submit]').click();
 });
 
@@ -35,18 +35,18 @@ Cypress.Commands.add(
   'registerLandlord',
   ({ orgName, locale, currency, company }) => {
     cy.get('[data-cy=companyFalse]').click();
-    cy.get('input[name=name]').type(orgName);
+    cy.get('input[name=name]').clear().type(orgName);
     cy.muiSelect('locale', locale);
     cy.muiSelect('currency', currency);
     if (company) {
       const { name, legalRepresentative, legalStructure, ein, capital } =
         company;
       cy.get('[data-cy=companyTrue]').click();
-      cy.get('input[name=legalRepresentative]').type(legalRepresentative);
-      cy.get('input[name=legalStructure]').type(legalStructure);
-      cy.get('input[name=company]').type(name);
-      cy.get('input[name=ein]').type(ein);
-      cy.get('input[name=capital]').type(capital);
+      cy.get('input[name=legalRepresentative]').clear().type(legalRepresentative);
+      cy.get('input[name=legalStructure]').clear().type(legalStructure);
+      cy.get('input[name=company]').clear().type(name);
+      cy.get('input[name=ein]').clear().type(ein);
+      cy.get('input[name=capital]').clear().type(capital);
     }
     cy.get('[data-cy=submit]').click();
   }
@@ -56,21 +56,20 @@ Cypress.Commands.add(
   'createContractFromStepper',
   ({ name, description, timeRange, numberOfTerms, templates = [] }) => {
     cy.get('[data-cy=shortcutCreateContract]').click();
-    cy.get('input[name=name]').type(name);
+    cy.get('input[name=name]').clear().type(name);
     cy.get('[data-cy=submitContract]').click();
-    cy.get('textarea[name=description]').type(description);
+    cy.get('textarea[name=description]').clear().type(description);
     cy.muiSelect('timeRange', timeRange);
-    cy.get('input[name=numberOfTerms]').type(numberOfTerms);
+    cy.get('input[name=numberOfTerms]').clear().type(numberOfTerms);
     cy.get('[data-cy=submit]').click();
     templates.map(({ type, ...template }) => {
       if (type === 'text') {
         const { title, content } = template;
         cy.get('[data-cy=addTextDocument]').click();
-        cy.get('input[name=title]').clear();
-        cy.get('input[name=title]').type(title);
+        cy.get('input[name=title]').clear().type(title);
         cy.get('[data-cy="savingTextDocument"]').should('not.exist');
         cy.get('[data-cy="savedTextDocument"]').should('not.exist');
-        cy.get('.ProseMirror').type(content);
+        cy.get('.ProseMirror').clear().type(content);
         cy.get('[data-cy="savingTextDocument"]').should('not.exist');
         cy.get('[data-cy="savedTextDocument"]').should('not.exist');
         cy.get('[data-cy=close]').click();
@@ -84,8 +83,8 @@ Cypress.Commands.add(
           optional
         } = template;
         cy.get('[data-cy=addFileDescriptor]').click();
-        cy.get('input[name=name]').type(title);
-        cy.get('input[name=description]').type(description);
+        cy.get('input[name=name]').clear().type(title);
+        cy.get('input[name=description]').clear().type(description);
         if (hasExpiryDate) {
           cy.get('div:has(>input[name=hasExpiryDate]) > button').click();
         }
@@ -107,28 +106,28 @@ Cypress.Commands.add(
   'addPropertyFromStepper',
   ({ name, type, description, surface, phone, digiCode, address, rent }) => {
     cy.get('[data-cy=shortcutAddProperty]').click();
-    cy.get('input[name=name]').type(name);
+    cy.get('input[name=name]').clear().type(name);
     cy.get('[data-cy=submitProperty]').click();
     cy.contains(i18n.getFixedT('fr-FR')('Property information'));
     cy.muiSelectText(
       'type',
       i18n.getFixedT('fr-FR')(type.replace(/^./, type[0].toUpperCase()))
     );
-    cy.get('input[name=rent]').type(rent);
-    cy.get('input[name=description]').type(description);
-    cy.get('input[name=surface]').type(surface);
-    cy.get('input[name=phone]').type(phone);
-    cy.get('input[name=digicode]').type(digiCode);
+    cy.get('input[name=rent]').clear().type(rent);
+    cy.get('input[name=description]').clear().type(description);
+    cy.get('input[name=surface]').clear().type(surface);
+    cy.get('input[name=phone]').clear().type(phone);
+    cy.get('input[name=digicode]').clear().type(digiCode);
     if (address) {
       const { street1, street2, zipCode, city, state, country } = address;
-      cy.get('input[name="address.street1"]').type(street1);
+      cy.get('input[name="address.street1"]').clear().type(street1);
       if (street2) {
-        cy.get('input[name="address.street2"]').type(street2);
+        cy.get('input[name="address.street2"]').clear().type(street2);
       }
-      cy.get('input[name="address.zipCode"]').type(zipCode);
-      cy.get('input[name="address.city"]').type(city);
-      cy.get('input[name="address.state"]').type(state);
-      cy.get('input[name="address.country"]').type(country);
+      cy.get('input[name="address.zipCode"]').clear().type(zipCode);
+      cy.get('input[name="address.city"]').clear().type(city);
+      cy.get('input[name="address.state"]').clear().type(state);
+      cy.get('input[name="address.country"]').clear().type(country);
     }
     cy.get('[data-cy=submit]').click();
   }
@@ -147,47 +146,43 @@ Cypress.Commands.add(
     }
     if (address) {
       const { street1, street2, zipCode, city, state, country } = address;
-      cy.get('input[name="address.street1"]').type(street1);
+      cy.get('input[name="address.street1"]').clear().type(street1);
       if (street2) {
-        cy.get('input[name="address.street2"]').type(street2);
+        cy.get('input[name="address.street2"]').clear().type(street2);
       }
-      cy.get('input[name="address.zipCode"]').type(zipCode);
-      cy.get('input[name="address.city"]').type(city);
-      cy.get('input[name="address.state"]').type(state);
-      cy.get('input[name="address.country"]').type(country);
+      cy.get('input[name="address.zipCode"]').clear().type(zipCode);
+      cy.get('input[name="address.city"]').clear().type(city);
+      cy.get('input[name="address.state"]').clear().type(state);
+      cy.get('input[name="address.country"]').clear().type(country);
     }
     contacts.forEach(({ name, email, phone1, phone2 }, index) => {
       if (index > 0) {
         cy.get('button[data-cy=addContactsItem]').click();
       }
-      cy.get(`input[name="contacts[${index}].contact"]`).type(name);
-      cy.get(`input[name="contacts[${index}].email"]`).type(email);
-      cy.get(`input[name="contacts[${index}].phone1"]`).type(phone1);
-      cy.get(`input[name="contacts[${index}].phone2"]`).type(phone2);
+      cy.get(`input[name="contacts[${index}].contact"]`).clear().type(name);
+      cy.get(`input[name="contacts[${index}].email"]`).clear().type(email);
+      cy.get(`input[name="contacts[${index}].phone1"]`).clear().type(phone1);
+      cy.get(`input[name="contacts[${index}].phone2"]`).clear().type(phone2);
     });
     cy.get('[data-cy=submit]').click();
 
     if (lease) {
       const { contract, beginDate, properties } = lease;
       cy.muiSelectText('leaseId', contract);
-      cy.get('input[name=beginDate]').clear();
-      cy.get('input[name=beginDate]').type(beginDate);
+      cy.get('input[name=beginDate]').clear().type(beginDate);
       properties.forEach(({ name, expense, entryDate, exitDate }, index) => {
         if (index > 0) {
           cy.get('[data-cy=addPropertiesItem]').click();
         }
         cy.muiSelectText(`properties[${index}]._id`, name);
-        cy.get(`input[name="properties[${index}].expenses[0].title"]`).type(
+        cy.get(`input[name="properties[${index}].expenses[0].title"]`).clear().type(
           expense.title
         );
-        cy.get(`input[name="properties[${index}].expenses[0].amount"]`).clear();
-        cy.get(`input[name="properties[${index}].expenses[0].amount"]`).type(
+        cy.get(`input[name="properties[${index}].expenses[0].amount"]`).clear().type(
           expense.amount
         );
-        cy.get(`input[name="properties[${index}].entryDate"]`).clear();
-        cy.get(`input[name="properties[${index}].entryDate"]`).type(entryDate);
-        cy.get(`input[name="properties[${index}].exitDate"]`).clear();
-        cy.get(`input[name="properties[${index}].exitDate"]`).type(exitDate);
+        cy.get(`input[name="properties[${index}].entryDate"]`).clear().type(entryDate);
+        cy.get(`input[name="properties[${index}].exitDate"]`).clear().type(exitDate);
       });
     }
     cy.get('[data-cy=submit]').click();
@@ -197,8 +192,7 @@ Cypress.Commands.add(
       if (isVat) {
         cy.get('div:has(>input[name=isVat]) > button').click();
       }
-      cy.get('input[name=vatRatio]').clear();
-      cy.get('input[name=vatRatio]').type(percentageVatRatio);
+      cy.get('input[name=vatRatio]').clear().type(percentageVatRatio);
     }
     cy.get('[data-cy=submit]').click();
 
@@ -211,13 +205,12 @@ Cypress.Commands.add(
             `[data-cy=template-${templateName.replace(/\s/g, '')}]`
           ).click();
           if (title) {
-            cy.get('input[name=title]').clear();
-            cy.get('input[name=title]').type(title);
+            cy.get('input[name=title]').clear().type(title);
             cy.get('[data-cy="savingTextDocument"]').should('not.exist');
             cy.get('[data-cy="savedTextDocument"]').should('not.exist');
           }
           if (content) {
-            cy.get('.ProseMirror').type(content);
+            cy.get('.ProseMirror').clear().type(content);
             cy.get('[data-cy="savingTextDocument"]').should('not.exist');
             cy.get('[data-cy="savedTextDocument"]').should('not.exist');
           }

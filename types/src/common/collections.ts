@@ -143,6 +143,22 @@ export namespace CollectionTypes {
     address: CollectionTypes.PartAddress;
     price: number;
 
+    // Enhanced tracking
+    managerEmail?: string;
+    managerWhatsApp?: string;
+    localFolderPath?: string;
+    financialConfigs?: {
+      loanAmount: number;
+      interestRate: number;
+      incomeKeywords: string[];
+      expenseKeywords: string[];
+    };
+    taxReturnBenchmark?: {
+      annualIncome?: number;
+      annualExpenses?: number;
+      annualInterest?: number;
+    };
+
     // TODO to remove, replaced by address
     building: string;
     level: string;

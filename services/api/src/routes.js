@@ -6,6 +6,7 @@ import * as occupantManager from './managers/occupantmanager.js';
 import * as propertyManager from './managers/propertymanager.js';
 import * as realmManager from './managers/realmmanager.js';
 import * as rentManager from './managers/rentmanager.js';
+import * as integrationManager from './managers/integrationmanager.js';
 import { Middlewares, Service } from '@microrealestate/common';
 import express from 'express';
 
@@ -81,6 +82,18 @@ export default function routes() {
   propertiesRouter.delete(
     '/:ids',
     Middlewares.asyncWrapper(propertyManager.remove)
+  );
+  propertiesRouter.get(
+    '/:id/finance',
+    Middlewares.asyncWrapper(integrationManager.getFinance)
+  );
+  propertiesRouter.get(
+    '/:id/communication',
+    Middlewares.asyncWrapper(integrationManager.getCommunication)
+  );
+  propertiesRouter.get(
+    '/:id/documents',
+    Middlewares.asyncWrapper(integrationManager.getDocuments)
   );
   router.use('/properties', propertiesRouter);
 

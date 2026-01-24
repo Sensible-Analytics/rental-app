@@ -133,4 +133,31 @@ export default class Property {
       return { status: error?.response?.status };
     }
   }
+
+  *fetchFinance(propertyId) {
+    try {
+      const response = yield apiFetcher().get(`/properties/${propertyId}/finance`);
+      return { status: 200, data: response.data };
+    } catch (error) {
+      return { status: error?.response?.status };
+    }
+  }
+
+  *fetchCommunication(propertyId) {
+    try {
+      const response = yield apiFetcher().get(`/properties/${propertyId}/communication`);
+      return { status: 200, data: response.data };
+    } catch (error) {
+      return { status: error?.response?.status };
+    }
+  }
+
+  *fetchDocuments(propertyId) {
+    try {
+      const response = yield apiFetcher().get(`/properties/${propertyId}/documents`);
+      return { status: 200, data: response.data };
+    } catch (error) {
+      return { status: error?.response?.status };
+    }
+  }
 }

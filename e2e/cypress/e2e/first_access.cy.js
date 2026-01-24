@@ -38,9 +38,7 @@ describe('User access', () => {
     cy.get('input[name=capital]');
 
     cy.registerLandlord(userWithPersonalAccount);
-    cy.checkUrl(
-      `/fr-FR/${encodeURI(userWithPersonalAccount.orgName)}/dashboard`
-    );
+    cy.checkUrl('/dashboard');
     cy.signOut();
   });
 

@@ -21,7 +21,23 @@ const PropertySchema = new mongoose.Schema<CollectionTypes.Property>({
     country: String
   },
 
-  price: Number
+  price: Number,
+  managerEmail: String,
+  managerWhatsApp: String,
+  localFolderPath: String,
+  financialConfigs: {
+    _id: false,
+    loanAmount: Number,
+    interestRate: Number,
+    incomeKeywords: [String],
+    expenseKeywords: [String]
+  },
+  taxReturnBenchmark: {
+    _id: false,
+    annualIncome: Number,
+    annualExpenses: Number,
+    annualInterest: Number
+  }
 });
 export default mongoose.model<CollectionTypes.Property>(
   'Property',
