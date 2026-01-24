@@ -6,15 +6,15 @@ rental-app is an open-source application designed to assist landlords in managin
 
 ## Key Features
 
-- Centralized Property and Tenant Information: MRE allows landlords to store all property and tenant details in one convenient location. From property specifications to tenant records and contact information.
+- Centralized Property and Tenant Information: RentalApp allows landlords to store all property and tenant details in one convenient location. From property specifications to tenant records and contact information.
 
-- Rent Lease Creation: MRE simplifies the process of creating rent leases. It offers customizable templates that enable landlords to generate lease.
+- Rent Lease Creation: RentalApp simplifies the process of creating rent leases. It offers customizable templates that enable landlords to generate lease.
 
-- Rent Payment Tracking: MRE provides a comprehensive system for tracking rent payments, helping landlords stay updated on transactions and promptly address any overdue payments.
+- Rent Payment Tracking: RentalApp provides a comprehensive system for tracking rent payments, helping landlords stay updated on transactions and promptly address any overdue payments.
 
-- Custom Document Generation: MRE allows landlords to create custom documents for effective communication with tenants. Personalized letters, notices, and announcements can be generated to ensure clear and consistent correspondence.
+- Custom Document Generation: RentalApp allows landlords to create custom documents for effective communication with tenants. Personalized letters, notices, and announcements can be generated to ensure clear and consistent correspondence.
 
-- Collaboration: Whether you are an independent landlord or manage a real estate business with multiple collaborators, MRE supports collaboration and facilitates task coordination within teams.
+- Collaboration: Whether you are an independent landlord or manage a real estate business with multiple collaborators, RentalApp supports collaboration and facilitates task coordination within teams.
 
 ## Screenshots
 
@@ -42,8 +42,8 @@ rental-app is an open-source application designed to assist landlords in managin
 ``` shell
 mkdir mre
 cd mre
-curl https://raw.githubusercontent.com/microrealestate/microrealestate/master/docker-compose.yml > docker-compose.yml
-curl https://raw.githubusercontent.com/microrealestate/microrealestate/master/.env.domain > .env
+curl https://raw.githubusercontent.com/rental-app/rental-app/master/docker-compose.yml > docker-compose.yml
+curl https://raw.githubusercontent.com/rental-app/rental-app/master/.env.domain > .env
 ```
 
 Update the secrets and tokens in the `.env` file (at the end of the file).
@@ -127,7 +127,7 @@ To run the application in development mode, follow the steps outlined in the doc
 
 ## Donate
 
-Thank you for your interest in supporting MicroRealEstate.
+Thank you for your interest in supporting RentalApp.
 Every contribution will help us pay our ongoing maintenance and development costs 🙏
 
 [![Donate](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub)](https://github.com/sponsors/camelaissani)
