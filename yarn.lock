@@ -2238,7 +2238,7 @@ __metadata:
     "@playwright/test": ^1.42.1
     better-sqlite3: ^9.4.1
     chokidar: ^3.6.0
-    electron: ^29.1.1
+    electron: 29.1.1
     electron-builder: ^26.8.1
     electron-rebuild: ^3.2.9
     pdf-parse: ^1.1.1
@@ -9675,16 +9675,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:^29.1.1":
-  version: 29.4.6
-  resolution: "electron@npm:29.4.6"
+"electron@npm:29.1.1":
+  version: 29.1.1
+  resolution: "electron@npm:29.1.1"
   dependencies:
     "@electron/get": ^2.0.0
     "@types/node": ^20.9.0
     extract-zip: ^2.0.1
   bin:
     electron: cli.js
-  checksum: 14f4ae506032227083e59db3188863c71cd89c9df9490cc4bb014af55c9d93bd585093e06db4f221e897aea5b01805d4ad11e5f6ae7b41cbe493d84d55e5ffbf
+  checksum: 4615778c91e1c925b571164744cd9cda2772b73268d1c25f8dc04115eba23ccfd0f84a3b01b8cded25048c08f87996b73998306790af2e6fe8101be9e1d158da
   languageName: node
   linkType: hard
 
