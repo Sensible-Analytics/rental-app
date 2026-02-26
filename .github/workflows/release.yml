@@ -96,31 +96,22 @@ jobs:
       matrix:
         include:
             - appname: gateway
-              image: ghcr.io/${{ github.repository }}/gateway
               dockerfile: services/gateway/Dockerfile
             - appname: api
-              image: ghcr.io/${{ github.repository }}/api
               dockerfile: services/api/Dockerfile
             - appname: tenantapi
-              image: ghcr.io/${{ github.repository }}/tenantapi
               dockerfile: services/tenantapi/Dockerfile
             - appname: authenticator
-              image: ghcr.io/${{ github.repository }}/authenticator
               dockerfile: services/authenticator/Dockerfile
             - appname: pdfgenerator
-              image: ghcr.io/${{ github.repository }}/pdfgenerator
               dockerfile: services/pdfgenerator/Dockerfile
             - appname: emailer
-              image: ghcr.io/${{ github.repository }}/emailer
               dockerfile: services/emailer/Dockerfile
             - appname: resetservice
-              image: ghcr.io/${{ github.repository }}/resetservice
               dockerfile: services/resetservice/Dockerfile
             - appname: landlord-frontend
-              image: ghcr.io/${{ github.repository }}/landlord-frontend
               dockerfile: webapps/landlord/Dockerfile
             - appname: tenant-frontend
-              image: ghcr.io/${{ github.repository }}/tenant-frontend
               dockerfile: webapps/tenant/Dockerfile
 
     steps:
@@ -131,6 +122,11 @@ jobs:
 
         - name: Checkout
           uses: actions/checkout@v3
+
+        - name: Set up Image Name (lowercase)
+          run: |
+            REPO_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+            echo "IMAGE_NAME=ghcr.io/${REPO_LOWER}/${{ matrix.appname }}" >> $GITHUB_ENV
 
         - name: Login to GitHub Container Registry
           uses: docker/login-action@v2
@@ -143,7 +139,7 @@ jobs:
           id: meta
           uses: docker/metadata-action@v4
           with:
-            images: ${{ matrix.image }}
+            images: ${{ env.IMAGE_NAME }}
 
         - name: Build and push to GitHub Container Registry
           uses: docker/build-push-action@v4
@@ -151,7 +147,7 @@ jobs:
             context: .
             file: ${{ matrix.dockerfile }}
             push: true
-            tags: '${{ matrix.image }}:${{ env.RELEASE_TAG }},${{ matrix.image }}:latest'
+            tags: '${{ env.IMAGE_NAME }}:${{ env.RELEASE_TAG }},${{ env.IMAGE_NAME }}:latest'
             labels: ${{ steps.meta.outputs.labels }}
 
      
