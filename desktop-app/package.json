@@ -1,0 +1,30 @@
+{
+  "name": "@microrealestate/desktop-app",
+  "version": "1.0.0",
+  "productName": "Property Management",
+  "description": "Property Management Desktop Application",
+  "main": "src/main/index.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "rebuild": "electron-rebuild"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.4.1",
+    "chokidar": "^3.6.0",
+    "pdf-parse": "^1.1.1",
+    "recharts": "^2.12.2",
+    "tesseract.js": "^5.0.4",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.1",
+    "electron": "^29.1.1",
+    "electron-builder": "^26.8.1",
+    "electron-rebuild": "^3.2.9",
+    "vitest": "^1.4.0"
+  }
+}

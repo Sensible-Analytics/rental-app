@@ -44,10 +44,50 @@ jobs:
           tag_name: ${{ github.event.release.tag_name }}
           name: ${{ github.event.release.tag_name }}
           files: |
-           ./mre-linux-x64.tar.gz
-           ./mre-macos-x64.tar.gz
-           ./mre-win-x64.zip
+            ./mre-linux-x64.tar.gz
+            ./mre-macos-x64.tar.gz
+            ./mre-win-x64.zip
 
+  build-desktop-app:
+    name: Build Desktop App (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Build Mac Desktop App
+        if: matrix.os == 'macos-latest'
+        run: yarn workspace @microrealestate/desktop-app build:mac
+
+      - name: Build Windows Desktop App
+        if: matrix.os == 'windows-latest'
+        run: yarn workspace @microrealestate/desktop-app build:win
+
+      - name: Build Linux Desktop App
+        if: matrix.os == 'ubuntu-latest'
+        run: yarn workspace @microrealestate/desktop-app build:linux
+
+      - name: Upload Desktop App Release Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: |
+            desktop-app/dist/*.dmg
+            desktop-app/dist/*.exe
+            desktop-app/dist/*.AppImage
 
   build-push-images:
     runs-on: ubuntu-latest

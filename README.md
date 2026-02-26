@@ -2,8 +2,15 @@
 
 [![Continuous Integration](https://github.com/Sensible-Analytics/rental-app/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/Sensible-Analytics/rental-app/actions/workflows/ci.yml)
 
-rental-app is an open-source application designed to assist landlords in managing their properties and rentals. rental-app serves as a centralized platform for landlords to streamline their property management tasks.
+RentalApp is a free, easy-to-use desktop application designed to help landlords manage their properties and rentals without the hassle. It serves as a single place for you to keep track of your properties, tenants, leases, and rent payments.
 
+## Getting Started (Desktop App)
+
+The easiest way to use RentalApp is to download the ready-made desktop application for your computer.
+
+1. Go to the [Releases page](https://github.com/Sensible-Analytics/rental-app/releases).
+2. Download the version for your operating system (e.g., `.exe` for Windows, `.dmg` for Mac, `.AppImage` for Linux).
+3. Install and run the application. No complex setup or servers required!
 ## Key Features
 
 - Centralized Property and Tenant Information: RentalApp allows landlords to store all property and tenant details in one convenient location. From property specifications to tenant records and contact information.

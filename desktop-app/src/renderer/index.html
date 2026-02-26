@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Property Manager - Premium Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0c0c0e;
+            --sidebar-bg: rgba(25, 25, 28, 0.8);
+            --card-bg: rgba(35, 35, 40, 0.7);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1a6;
+            --accent-blue: #0A84FF;
+            --accent-green: #30D158;
+            --accent-orange: #FF9F0A;
+            --accent-red: #FF453A;
+            --blur: 20px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(10, 132, 255, 0.15) 0, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(48, 209, 88, 0.1) 0, transparent 50%);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(var(--blur));
+            border-right: 1px solid var(--border-color);
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 100;
+        }
+        .sidebar-header {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 32px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #fff 0%, #a1a1a6 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-item {
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-item:hover { background: var(--glass-bg); color: #fff; }
+        .nav-item.active { background: var(--accent-blue); color: #fff; box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3); }
+
+        /* Main Content */
+        .content { flex: 1; padding: 48px; overflow-y: auto; scroll-behavior: smooth; }
+        .tab-view { display: none; animation: fadeIn 0.4s ease-out; }
+        .tab-view.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .view-header { margin-bottom: 40px; }
+        .view-header h1 { font-family: 'Outfit', sans-serif; font-size: 34px; font-weight: 700; margin: 0 0 8px 0; }
+        .view-header .subtitle { color: var(--text-secondary); font-size: 16px; }
+
+        /* Dashboard specific */
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 48px; }
+        .stat-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(var(--blur));
+            padding: 24px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s;
+        }
+        .stat-card:hover { transform: scale(1.02); }
+        .stat-card .label { color: var(--text-secondary); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .stat-card .value { font-size: 28px; font-weight: 700; font-family: 'Outfit', sans-serif; }
+
+        .section-title { font-size: 20px; font-weight: 600; margin: 40px 0 24px 0; color: #fff; }
+        .property-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 24px; }
+        
+        /* Glass Property Card */
+        .property-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(var(--blur));
+            padding: 28px;
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .property-card:hover { 
+            background: rgba(45, 45, 50, 0.8);
+            border-color: var(--accent-blue);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .property-card::after {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .property-card:hover::after { opacity: 1; }
+
+        .property-type { font-size: 11px; font-weight: 700; color: var(--accent-blue); text-transform: uppercase; margin-bottom: 8px; }
+        .property-card h3 { margin: 0; font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+        .property-addr { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
+        .property-stats { display: flex; justify-content: space-between; align-items: flex-end; }
+        .badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; }
+        .badge-green { background: rgba(48, 209, 88, 0.15); color: var(--accent-green); }
+        .badge-orange { background: rgba(255, 159, 10, 0.15); color: var(--accent-orange); }
+
+        /* Property Detail View */
+        .detail-view { display: none; flex-direction: column; gap: 32px; }
+        .back-btn { cursor: pointer; color: var(--accent-blue); display: flex; align-items: center; gap: 8px; margin-bottom: 24px; font-weight: 600; }
+        
+        .property-hero {
+            background: linear-gradient(135deg, rgba(10, 132, 255, 0.1), rgba(48, 209, 88, 0.05));
+            border-radius: 32px;
+            padding: 40px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .hero-info h1 { font-size: 38px; margin: 0 0 8px 0; font-family: 'Outfit'; }
+        .hero-info p { color: var(--text-secondary); margin: 0; font-size: 18px; }
+        
+        .detail-tabs { display: flex; gap: 32px; border-bottom: 1px solid var(--border-color); margin-top: 24px; }
+        .detail-tab-btn { 
+            padding: 16px 0; color: var(--text-secondary); cursor: pointer; font-weight: 600; 
+            position: relative; transition: color 0.2s;
+        }
+        .detail-tab-btn.active { color: #fff; }
+        .detail-tab-btn.active::after {
+            content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 3px;
+            background: var(--accent-blue); border-radius: 3px;
+        }
+
+        .tab-content { padding-top: 32px; }
+        
+        /* Folder Tree Browser */
+        .folder-item { 
+            padding: 12px 16px; border-radius: 12px; cursor: pointer; transition: background 0.2s;
+            display: flex; align-items: center; gap: 12px; border: 1px solid transparent; margin-bottom: 4px;
+        }
+        .folder-item:hover { background: var(--glass-bg); border-color: var(--border-color); }
+        .file-icon { font-size: 20px; }
+        .file-meta { font-size: 12px; color: var(--text-secondary); margin-left: auto; }
+
+        /* Ingestion Timeline */
+        .pipeline-card { background: var(--card-bg); border-radius: 20px; padding: 24px; margin-bottom: 16px; border-left: 4px solid var(--accent-blue); }
+        .progress-bar-container { height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; margin: 12px 0; overflow: hidden; }
+        .progress-bar { height: 100%; background: var(--accent-blue); width: 0%; transition: width 0.3s; }
+
+        /* Notifications & Actions */
+        .actions-panel { background: var(--card-bg); border-radius: 24px; padding: 24px; border: 1px solid var(--border-color); }
+        .action-row { display: flex; align-items: center; gap: 16px; padding: 16px; border-bottom: 1px solid var(--border-color); }
+        .action-row:last-child { border-bottom: none; }
+        /* Quick View Panel */
+        .quick-view-overlay {
+            position: fixed; top: 0; right: -600px; width: 550px; height: 100vh;
+            background: var(--sidebar-bg); backdrop-filter: blur(var(--blur));
+            border-left: 1px solid var(--border-color); z-index: 1000;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 40px; overflow-y: auto; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+        }
+        .quick-view-overlay.active { right: 0; }
+        .qv-close { position: absolute; top: 20px; left: 20px; cursor: pointer; color: var(--text-secondary); }
+        .qv-content { font-size: 14px; line-height: 1.6; color: var(--text-secondary); white-space: pre-wrap; font-family: 'Inter', sans-serif; }
+        .qv-content h1, .qv-content h2 { color: #fff; font-family: 'Outfit'; margin-top: 24px; }
+        .qv-content blockquote { border-left: 4px solid var(--accent-blue); padding-left: 16px; margin: 16px 0; font-style: italic; }
+
+        .qv-toggle-btn {
+            background: rgba(255,255,255,0.05); color: var(--text-secondary);
+            border: 1px solid var(--border-color); border-radius: 8px;
+            padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .qv-toggle-btn.active {
+            background: var(--accent-blue); color: #fff; border-color: var(--accent-blue);
+        }
+        .qv-toggle-btn:hover:not(.active) {
+            background: rgba(255,255,255,0.1);
+        }
+        /* Pipeline Board */
+        .pipeline-board { display: flex; gap: 12px; margin-bottom: 32px; overflow-x: auto; padding-bottom: 12px; }
+        .pipeline-column { 
+            flex: 1; min-width: 200px; background: rgba(255,255,255,0.02); 
+            border-radius: 20px; border: 1px solid var(--border-color); padding: 20px;
+        }
+        .pipeline-column h4 { margin: 0 0 16px 0; font-family: 'Outfit'; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary); }
+        .pipeline-card-mini { 
+            background: var(--card-bg); border-radius: 12px; padding: 12px; margin-bottom: 8px; 
+            border: 1px solid var(--border-color); font-size: 12px; 
+        }
+        .pipeline-card-mini .source-tag { font-size: 9px; font-weight: 700; color: var(--accent-blue); margin-bottom: 4px; display: block; }
+        .pipeline-card-mini:hover { border-color: var(--accent-blue); cursor: pointer; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .pipeline-card-mini.error .source-tag { color: var(--accent-red); }
+        
+        /* Lineage Arrows */
+        .pipeline-column { position: relative; }
+        .pipeline-column:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.2);
+            font-size: 20px;
+            font-weight: 300;
+        }
+
+        .raw-meta-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 24px; }
+        .raw-meta-table th { text-align: left; color: var(--text-secondary); padding: 8px 0; border-bottom: 1px solid var(--border-color); }
+        .raw-meta-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: #fff; }
+    </style>
+</head>
+<body>
+    <div id="quick-view-panel" class="quick-view-overlay">
+        <div class="qv-close" onclick="closeQuickView()">✕ Close Preview</div>
+        <div id="quick-view-content" class="qv-content"></div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-header">Property Management</div>
+        <div class="nav-item active" onclick="switchView('dashboard')">
+            <span>🏠</span> Dashboard
+        </div>
+
+
+        <div style="margin-top: auto; padding: 16px; background: var(--glass-bg); border-radius: 16px;">
+            <button onclick="resetApp()" style="width: 100%; background: rgba(255, 69, 58, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); border-radius: 8px; padding: 8px; margin-bottom: 12px; cursor: pointer; font-weight: 600; font-size: 11px;">🔄 RESET APP</button>
+            <div style="font-size: 11px; color: var(--text-secondary); font-weight: 700; margin-bottom: 4px;">SYNC STATUS</div>
+            <div id="sync-status" style="font-size: 13px;">Idle</div>
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- Dashboard View -->
+        <div id="view-dashboard" class="tab-view active">
+            <div class="view-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                    <h1>Portfolio Overview</h1>
+                    <div class="subtitle" id="portfolio-subtitle">Loading...</div>
+                </div>
+                <button onclick="syncData()" style="padding: 12px 24px; background: var(--accent-blue); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-family: 'Outfit';">🔄 Refresh Sync</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="label">NET WEALTH</div>
+                    <div class="value" id="stat-wealth">Loading...</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">ANNUAL YIELD</div>
+                    <div class="value" id="stat-yield" style="color: var(--accent-green);">5.4%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">MONTHLY CASHFLOW</div>
+                    <div class="value" id="stat-cashflow">₹1.8L</div>
+                </div>
+                <div class="stat-card" style="border-color: var(--accent-orange);">
+                    <div class="label">PENDING ACTIONS</div>
+                    <div class="value" id="stat-actions" style="color: var(--accent-orange);">--</div>
+                </div>
+            </div>
+
+            <div class="section-title">ACTIVE PORTFOLIO</div>
+            <div class="property-grid" id="dashboard-property-grid">
+                <!-- Injected via loadDashboard() -->
+            </div>
+
+            <div class="section-title">GLOBAL INGESTION PIPELINE</div>
+            <div class="actions-panel" id="global-ingestion-list">
+                <!-- Log items processed by background ingestion -->
+                <div style="color: var(--text-secondary); text-align: center; padding: 20px;">No recent activity. Synchronize to see live progress.</div>
+            </div>
+        </div>
+
+        <!-- Property Detail View -->
+        <div id="view-property-detail" class="tab-view">
+            <div class="back-btn" onclick="switchView('dashboard')">← Back to Dashboard</div>
+            
+            <div class="property-hero" id="detail-hero">
+                <!-- Populated via openPropertyDetail() -->
+            </div>
+
+            <div class="detail-tabs">
+                <div class="detail-tab-btn active" onclick="switchDetailTab('profile', this)">OVERVIEW & HIGHLIGHTS</div>
+                <div class="detail-tab-btn" onclick="switchDetailTab('pipeline', this)">EXTRACTION PIPELINE</div>
+                <div class="detail-tab-btn" onclick="switchDetailTab('finances', this)">FINANCIAL HIGHLIGHTS</div>
+                <div class="detail-tab-btn" onclick="switchDetailTab('history', this)">CHRONOLOGICAL LOGS</div>
+            </div>
+
+            <!-- Detail Sub-views -->
+            <div id="dt-profile" class="tab-content">
+                <div class="card" style="padding: 40px; line-height: 1.8;">
+                    <div id="property-highlight-content" class="qv-content">Loading highlight...</div>
+                    
+                    <h3 style="margin-top: 40px; color: #fff;">Raw Financial Data</h3>
+                    <table class="raw-meta-table">
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody id="raw-financial-data"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="dt-pipeline" class="tab-content" style="display: none;">
+                <div class="pipeline-board" id="property-pipeline-board">
+                    <div class="pipeline-column">
+                        <h4>Raw Data Arrival</h4>
+                        <div id="pipe-staged"></div>
+                    </div>
+                    <div class="pipeline-column">
+                        <h4>Text Extraction</h4>
+                        <div id="pipe-extracted"></div>
+                    </div>
+                    <div class="pipeline-column">
+                        <h4>Category Classification</h4>
+                        <div id="pipe-classified"></div>
+                    </div>
+                    <div class="pipeline-column">
+                        <h4>Financial Fact Extraction</h4>
+                        <div id="pipe-finalized"></div>
+                    </div>
+                    <div class="pipeline-column" style="background: rgba(255, 69, 58, 0.02); border-color: rgba(255, 69, 58, 0.2);">
+                        <h4 style="color: var(--accent-red);">Errors / Blocked</h4>
+                        <div id="pipe-error"></div>
+                    </div>
+                </div>
+
+                <!-- Live File Repository -->
+                <div style="margin-top: 40px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                    <h3>📂 Internal Data Vault</h3>
+                    <div id="folder-browser-list"></div>
+                </div>
+
+            </div>
+
+            <div id="dt-finances" class="tab-content" style="display: none;">
+                <div id="property-finances-content"></div>
+            </div>
+
+            <!-- Removed Folder Browser (dt-docs) -->
+
+            <div id="dt-history" class="tab-content" style="display: none;">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentProperty = null;
+
+        function switchView(viewId) {
+            document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
+            document.getElementById('view-' + viewId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.toggle('active', item.innerText.toLowerCase().includes(viewId));
+            });
+
+            if (viewId === 'dashboard') loadDashboard();
+        }
+
+        function switchDetailTab(tabId, el) {
+            document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+            document.getElementById('dt-' + tabId).style.display = 'block';
+            
+            document.querySelectorAll('.detail-tab-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+
+            if (tabId === 'profile') loadPropertyProfile();
+            if (tabId === 'pipeline') {
+                loadPropertyPipeline();
+                loadFolderBrowser();
+            }
+            if (tabId === 'finances') loadPropertyFinances();
+            if (tabId === 'docs') loadFolderBrowser();
+            if (tabId === 'history') loadPropertyHistory();
+        }
+
+        async function loadPropertyProfile() {
+            const container = document.getElementById('property-highlight-content');
+            container.innerHTML = '<div style="color: var(--text-secondary)">Loading highlight...</div>';
+            
+            try {
+                const content = await window.electron.ipcRenderer.invoke('read-property-profile', currentProperty.name);
+                
+                if (!content) {
+                    container.innerHTML = `<div style="color: var(--text-secondary)">No profile highlight found. Run sync to generate it.</div>`;
+                    return;
+                }
+
+                // Simple MD rendering reuse
+                let html = content
+                    .replace(/^# (.*$)/gim, '<h1 style="color: #fff; font-family: Outfit; font-size: 32px; margin-bottom: 24px;">$1</h1>')
+                    .replace(/^## (.*$)/gim, '<h2 style="color: #fff; margin-top: 32px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">$1</h2>')
+                    .replace(/^> (.*$)/gim, '<blockquote style="border-left: 4px solid var(--accent-blue); padding-left: 16px; margin: 16px 0; font-style: italic;">$1</blockquote>')
+                    .replace(/\*\*(.*)\*\*/gim, '<b style="color: var(--accent-blue)">$1</b>')
+                    .replace(/\n/g, '<br>');
+                
+                container.innerHTML = html;
+            } catch (err) {
+                console.error('Renderer Error:', err);
+                container.innerHTML = `<div style="color: var(--accent-red)">Error loading highlight: ${err.message}</div>`;
+            }
+        }
+
+        async function loadPropertyFinances() {
+            const container = document.getElementById('property-finances-content');
+            container.innerHTML = '<div style="color: var(--text-secondary)">Calculating financial brief...</div>';
+            
+            try {
+                const finances = await window.electron.ipcRenderer.invoke('get-property-finances', currentProperty.id);
+                
+                container.innerHTML = `
+                    <div class="stats-grid" style="margin-bottom: 32px;">
+                        <div class="stat-card">
+                            <div class="label">EST. INCOME (Total)</div>
+                            <div class="value" style="color: var(--accent-green);">
+                                ${currentProperty.country === 'IN' ? '₹' : 'A$'}${(finances.total_income || 0).toLocaleString()}
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">EST. EXPENSES (Total)</div>
+                            <div class="value" style="color: var(--accent-red);">
+                                ${currentProperty.country === 'IN' ? '₹' : 'A$'}${(finances.total_expenses || 0).toLocaleString()}
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">LOAN ACCOUNT</div>
+                            <div class="value">${finances.loan_amount ? (currentProperty.country === 'IN' ? '₹' : 'A$') + finances.loan_amount.toLocaleString() : 'N/A'}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="label">CURRENT VALUE</div>
+                            <div class="value" style="color: var(--accent-blue);">
+                                ${currentProperty.country === 'IN' ? '₹' : 'A$'}${(currentProperty.current_value || 0).toLocaleString()}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card" style="padding: 24px;">
+                        <h3 style="margin-top: 0;">Financial Health Summary</h3>
+                        <p style="color: var(--text-secondary); line-height: 1.6;">
+                            This property currently shows a <b>${((finances.total_income / (currentProperty.purchase_price || 1)) * 100).toFixed(2)}%</b> yield on investment. 
+                            Aggregated loans total <b>${finances.loan_amount ? (currentProperty.country === 'IN' ? '₹' : 'A$') + finances.loan_amount.toLocaleString() : 'N/A'}</b> across tracked accounts.
+                        </p>
+                    </div>
+                `;
+            } catch (err) {
+                container.innerHTML = `<div style="color: var(--accent-red)">Failed to load financial data.</div>`;
+            }
+        }
+
+        async function openPropertyDetail(property) {
+            currentProperty = property;
+            switchView('property-detail');
+            
+            // Hero
+            const hero = document.getElementById('detail-hero');
+            // Check for errors to show in Hero
+            const history = await window.electron.ipcRenderer.invoke('get-property-history', property.id);
+            const hasError = history.some(h => h.event_type === 'PIPELINE_ERROR' && (new Date() - new Date(h.event_date)) < 86400000 * 7);
+
+            hero.innerHTML = `
+                <div class="hero-info">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <h1>${property.name}</h1>
+                        ${hasError ? '<div class="badge" style="background: var(--accent-red); color: #fff; padding: 4px 12px;">⚠️ PIPELINE BLOCKED</div>' : ''}
+                    </div>
+                    <p>${property.address || 'Metadata synchronization in progress...'}</p>
+                    <div style="margin-top: 16px; display: flex; gap: 24px;">
+                        <div>
+                            <div style="font-size: 11px; color: var(--text-secondary); font-weight: 700;">TENANT STATUS</div>
+                            <div style="font-size: 18px; font-weight: 600;">Standard Lease</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 11px; color: var(--text-secondary); font-weight: 700;">VALUATION</div>
+                            <div style="font-size: 18px; font-weight: 600; color: var(--accent-green);">
+                                ${property.country === 'IN' ? '₹' : 'A$'}${(property.current_value || 0).toLocaleString()}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="badge badge-green" style="padding: 10px 20px; font-size: 14px;">✓ LATEST RENT COLLECTED</div>
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">Next due in 12 days</div>
+                </div>
+            `;
+
+            // Load default tab
+            switchDetailTab('profile', document.querySelector('.detail-tab-btn.active'));
+            // Fetch and render Raw Financial Data
+            try {
+                const files = await window.electron.ipcRenderer.invoke('list-property-files', currentProperty.name);
+                const financialFiles = files.filter(f => f.name.endsWith('.json'));
+                
+                if (financialFiles.length > 0) {
+                    const rows = await Promise.all(financialFiles.map(async f => {
+                        try {
+                            const content = JSON.parse(await window.electron.ipcRenderer.invoke('read-file-content', f.path));
+                            if (!content.ocr_result) return '';
+                            return `
+                                <tr>
+                                    <td onclick="openFile('${f.path.replace('.json', '').replace(/\\/g, '\\\\')}')" style="cursor: pointer; text-decoration: underline;">
+                                        ${path.basename(f.path).replace('.json', '')}
+                                    </td>
+                                    <td><span class="badge" style="background: rgba(255,255,255,0.1);">${content.category || 'N/A'}</span></td>
+                                    <td>${content.ocr_result.amount || '--'}</td>
+                                    <td>${content.ocr_result.date || '--'}</td>
+                                    <td>HIGH</td>
+                                </tr>
+                            `;
+                        } catch (e) { return ''; }
+                    }));
+                    document.getElementById('raw-financial-data').innerHTML = rows.join('') || '<tr><td colspan="5" style="text-align: center; padding: 20px;">No financial metadata extracted yet.</td></tr>';
+                } else {
+                    document.getElementById('raw-financial-data').innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px;">No financial metadata extracted yet.</td></tr>';
+                }
+            } catch (err) {
+                console.error('Error loading raw financials:', err);
+            }
+        }
+                
+        async function loadDashboard() {
+            const properties = await window.electron.ipcRenderer.invoke('get-all-properties');
+            
+            // Update dynamic subtitle
+            const propertyCount = properties.length;
+            const countries = [...new Set(properties.map(p => p.country))].join(' & ');
+            document.getElementById('portfolio-subtitle').innerText = 
+                propertyCount > 0 ? `Managing ${propertyCount} ${propertyCount === 1 ? 'property' : 'properties'}${countries ? ' across ' + countries : ''}` : 'No properties yet';
+            
+            // Calculate stats
+            let totalValue = 0;
+            let totalDebt = 0;
+            
+            for (const p of properties) {
+                totalValue += p.current_value || p.purchase_price || 0;
+                const loan = await window.electron.ipcRenderer.invoke('get-property-loan', p.id);
+                if (loan) totalDebt += loan.loan_amount || 0;
+            }
+            
+            const netWealth = totalValue - totalDebt;
+            document.getElementById('stat-wealth').innerText = 
+                netWealth >= 0 ? `$${(netWealth / 1000000).toFixed(2)}M` : `-$${Math.abs(netWealth / 1000000).toFixed(2)}M`;
+            
+            // Pending actions
+            const pendingActions = await window.electron.ipcRenderer.invoke('get-pending-actions');
+            document.getElementById('stat-actions').innerText = pendingActions || '0';
+            
+            // Property grid
+            const container = document.getElementById('dashboard-property-grid');
+            container.innerHTML = properties.map(p => `
+                <div class="property-card" onclick="openPropertyDetail(${JSON.stringify(p).replace(/"/g, '&quot;')})">
+                    <div class="property-type">${p.country === 'IN' ? 'INDIA' : 'AUSTRALIA'} PORTFOLIO</div>
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <h3>${p.name}</h3>
+                    </div>
+                    <div class="property-addr">${p.address || 'Standardizing metadata...'}</div>
+                    <div class="property-stats">
+                        <div>
+                            <div style="font-size: 10px; color: var(--text-secondary); margin-bottom: 2px;">VALUATION</div>
+                            <div style="font-weight: 700; font-family: 'Outfit';">
+                                ${p.country === 'IN' ? '₹' : 'A$'}${(p.current_value || 0).toLocaleString()}
+                            </div>
+                        </div>
+                        <span class="badge ${p.status === 'active' ? 'badge-green' : 'badge-orange'}">
+                            ${p.status.toUpperCase()}
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function loadPropertyPipeline() {
+            const history = await window.electron.ipcRenderer.invoke('get-property-history', currentProperty.id);
+            const stages = {
+                'PIPELINE_STAGED': document.getElementById('pipe-staged'),
+                'PIPELINE_EXTRACTED': document.getElementById('pipe-extracted'),
+                'PIPELINE_CLASSIFIED': document.getElementById('pipe-classified'),
+                'PIPELINE_FINALIZED': document.getElementById('pipe-finalized'),
+                'PIPELINE_ERROR': document.getElementById('pipe-error')
+            };
+
+            // Clear columns
+            Object.values(stages).forEach(col => col.innerHTML = '');
+
+            const fileStates = {};
+            history.forEach(h => {
+                if (h.event_type.startsWith('PIPELINE_')) {
+                    const fileName = h.description.split(': ').pop().split(' (')[0]; // Handle error suffix
+                    if (!fileStates[fileName]) fileStates[fileName] = { history: [] };
+                    fileStates[fileName].history.push(h);
+                    
+                    // Specific flag for errors
+                    if (h.event_type === 'PIPELINE_ERROR') fileStates[fileName].hasError = true;
+                }
+            });
+
+            // Get all files for lineage lookup
+            const allFiles = await window.electron.ipcRenderer.invoke('list-property-files', currentProperty.name);
+
+            // Render cards
+            Object.entries(fileStates).forEach(([name, state]) => {
+                const latest = state.history.sort((a,b) => new Date(b.event_date) - new Date(a.event_date))[0];
+                let targetStage = latest.event_type;
+                
+                // If it finalized, show in finalized even if there were transient errors? 
+                // Actually, if PIPELINE_ERROR is the latest status for THIS file journey, put it in error.
+                
+                const card = document.createElement('div');
+                card.className = `pipeline-card-mini ${state.hasError ? 'error' : ''}`;
+                
+                // Click handler for lineage (Open raw data)
+                const rawFile = allFiles.find(f => f.name === name && f.rel.includes('raw_data'));
+                if (rawFile) {
+                    card.onclick = () => openFile(rawFile.path);
+                    card.title = "Click to view original source file";
+                }
+
+                // Interactive Category Correction (only for Classified Stage)
+                const correctionSelect = targetStage === 'PIPELINE_CLASSIFIED' ? `
+                    <select onclick="event.stopPropagation()" onchange="correctCategory('${(allFiles.find(f => f.name === name && !f.rel.includes('raw_data')) || {}).path?.replace(/\\/g, '\\\\')}', this.value)" style="margin-top: 8px; width: 100%; background: rgba(0,0,0,0.2); color: #fff; border: 1px solid var(--border-color); border-radius: 4px; font-size: 10px; padding: 2px;">
+                        <option value="">Correct Category...</option>
+                        <option value="legal">Legal</option>
+                        <option value="expenses">Expenses</option>
+                        <option value="finances">Finances</option>
+                        <option value="income">Income</option>
+                    </select>
+                ` : '';
+
+                card.innerHTML = `
+                    <span class="source-tag">${name.split('.').pop().toUpperCase()} ${state.hasError ? '(FAILED)' : ''}</span>
+                    <div style="font-weight: 600;">${name}</div>
+                    <div style="font-size: 10px; color: var(--text-secondary); margin-top: 4px;">
+                        ${state.hasError ? `<span style="color: var(--accent-red)">${latest.description.split(' (').pop().replace(')', '')}</span>` : `Last: ${new Date(latest.event_date).toLocaleTimeString()}`}
+                    </div>
+                    ${correctionSelect}
+                `;
+                
+                if (stages[targetStage]) {
+                    stages[targetStage].appendChild(card);
+                } else if (state.hasError) {
+                    stages['PIPELINE_ERROR'].appendChild(card);
+                }
+            });
+
+            // If columns empty
+            Object.values(stages).forEach(col => {
+                if (col.innerHTML === '') col.innerHTML = '<div style="color: rgba(255,255,255,0.1); font-size: 11px; text-align: center; padding: 10px;">Idle</div>';
+            });
+        }
+
+        async function loadFolderBrowser() {
+            const list = document.getElementById('folder-browser-list');
+            list.innerHTML = '<div style="color: var(--text-secondary)">Scanning internal data vault...</div>';
+            
+            const files = await window.electron.ipcRenderer.invoke('list-property-files', currentProperty.name);
+
+            if (files.length === 0) {
+                list.innerHTML = '<div style="color: var(--text-secondary); padding: 20px;">No documents yet. Run sync to ingest data.</div>';
+                return;
+            }
+
+            // Group by Top-level sections: Raw Data vs Taxonomy
+            const rawGroups = {};
+            const taxonomyGroups = {};
+
+            files.forEach(f => {
+                const parts = f.rel.split('/');
+                if (parts[0] === 'raw_data') {
+                    const source = parts[1] || 'Unknown Source';
+                    if (!rawGroups[source]) rawGroups[source] = [];
+                    rawGroups[source].push(f);
+                } else {
+                    const category = parts[0] || 'Uncategorized';
+                    if (!taxonomyGroups[category]) taxonomyGroups[category] = [];
+                    taxonomyGroups[category].push(f);
+                }
+            });
+
+            const renderGroups = (title, groups, icon) => {
+                if (Object.keys(groups).length === 0) return '';
+                return `
+                    <div style="margin-bottom: 40px;">
+                        <h3 style="color: var(--accent-blue); font-size: 14px; margin-bottom: 24px; display: flex; align-items: center; gap: 8px;">
+                            ${icon} ${title}
+                        </h3>
+                        ${Object.entries(groups).map(([name, items]) => `
+                            <div style="margin-bottom: 24px;">
+                                <div style="font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                                    📂 ${name.toUpperCase()}
+                                </div>
+                                ${items.map(i => {
+                                    const isViewable = i.name.match(/\.(md|json|txt)$/);
+                                    return `
+                                        <div class="folder-item">
+                                            <span class="file-icon" onclick="openFile('${i.path.replace(/\\/g, '\\\\')}')">${i.name.match(/\.(jpg|jpeg|png)$/) ? '🖼️' : '📄'}</span>
+                                            <span onclick="openFile('${i.path.replace(/\\/g, '\\\\')}')">${i.name}</span>
+                                            <div style="margin-left: auto; display: flex; gap: 8px; align-items: center;">
+                                                <button onclick="addHint('${i.path.replace(/\\/g, '\\\\')}')" style="background: rgba(255, 204, 0, 0.2); color: var(--accent-orange); border: 1px solid var(--accent-orange); border-radius: 4px; font-size: 10px; padding: 4px 8px; cursor: pointer;">💡 HINT</button>
+                                                <button onclick="markIrrelevant('${i.path.replace(/\\/g, '\\\\')}')" style="background: rgba(255, 69, 58, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); border-radius: 4px; font-size: 10px; padding: 4px 8px; cursor: pointer;">🚫 IGNORE</button>
+                                                ${isViewable ? `<button onclick="openQuickView('${i.path.replace(/\\/g, '\\\\')}')" style="background: var(--accent-blue); color: #fff; border: none; border-radius: 4px; font-size: 10px; padding: 4px 8px; cursor: pointer; font-weight: 600;">PREVIEW</button>` : ''}
+                                                ${title !== 'RAW DATA SOURCES' ? `
+                                                <select onchange="correctCategory('${i.path.replace(/\\/g, '\\\\')}', this.value)" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border-color); border-radius: 4px; font-size: 11px; padding: 2px 4px;">
+                                                    <option value="">Correct Category...</option>
+                                                    <option value="legal/identity">Identity Doc</option>
+                                                    <option value="income">Income/Rent</option>
+                                                    <option value="expenses">Expense/Bill</option>
+                                                    <option value="finances">Finance/Bank</option>
+                                                    <option value="legal">Legal/Lease</option>
+                                                    <option value="acquisition">Acquisition</option>
+                                                </select>` : ''}
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            };
+
+            list.innerHTML = renderGroups('FINALIZED TAXONOMY', taxonomyGroups, '🏛️') + 
+                             renderGroups('RAW DATA SOURCES', rawGroups, '📦');
+        }
+
+        let currentQuickViewPath = '';
+        async function openQuickView(filePath) {
+            currentQuickViewPath = filePath;
+            const container = document.getElementById('quick-view-content');
+            const panel = document.getElementById('quick-view-panel');
+            
+            // Add toggle header if not exists
+            if (!document.getElementById('qv-toggle-header')) {
+                const header = document.createElement('div');
+                header.id = 'qv-toggle-header';
+                header.style = 'margin-bottom: 20px; display: flex; gap: 12px;';
+                header.innerHTML = `
+                    <button onclick="renderQuickView('md')" class="qv-toggle-btn active" id="btn-qv-md">Document View</button>
+                    <button onclick="renderQuickView('json')" class="qv-toggle-btn" id="btn-qv-json">Raw Metadata (JSON)</button>
+                `;
+                panel.insertBefore(header, container);
+            }
+
+            renderQuickView(filePath.endsWith('.json') ? 'json' : 'md');
+            panel.classList.add('active');
+        }
+
+        async function renderQuickView(mode) {
+            const container = document.getElementById('quick-view-content');
+            const path = mode === 'json' ? (currentQuickViewPath.endsWith('.json') ? currentQuickViewPath : currentQuickViewPath + '.json') : currentQuickViewPath;
+            
+            document.querySelectorAll('.qv-toggle-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-qv-${mode}`).classList.add('active');
+
+            try {
+                const content = await window.electron.ipcRenderer.invoke('read-file-content', path);
+                
+                if (mode === 'json') {
+                    container.innerHTML = `<pre style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; overflow-x: auto;">${content}</pre>`;
+                } else {
+                    // Basic MD rendering
+                    let html = content
+                        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                        .replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>')
+                        .replace(/\*\*(.*)\*\*/gim, '<b>$1</b>')
+                        .replace(/\n/g, '<br>');
+                    container.innerHTML = html;
+                }
+            } catch (err) {
+                container.innerHTML = `<div style="color: var(--accent-red)">Metadata sidecar not found for this file.</div>`;
+            }
+        }
+
+        function closeQuickView() {
+            document.getElementById('quick-view-panel').classList.remove('active');
+        }
+
+        async function markIrrelevant(filePath) {
+            if (!confirm('Mark this file as irrelevant? It will be moved to _ignored folder.')) return;
+            
+            const res = await window.electron.ipcRenderer.invoke('mark-irrelevant', filePath);
+            if (res.success) {
+                // UI Refresh
+                loadFolderBrowser();
+            } else {
+                alert('Failed to mark irrelevant: ' + res.error);
+            }
+        }
+        
+        async function addHint(filePath) {
+            const hint = prompt('Enter helpful information about this document (e.g., "Water bill for Jan 2024"):');
+            if (!hint) return;
+            
+            const res = await window.electron.ipcRenderer.invoke('save-document-hint', {
+                filePath,
+                hint,
+                propertyName: currentProperty.name
+            });
+            
+            if (res.success) {
+                alert('Hint saved to profile.md! It will be available to the parsing agent on next run.');
+            } else {
+                alert('Failed to save hint: ' + res.error);
+            }
+        }
+        
+        async function correctCategory(filePath, newCategory) {
+            if (!newCategory) return;
+            if (!confirm(`Re-categorize this file to ${newCategory}? This will move the file and train the AI for future syncs.`)) return;
+
+            const res = await window.electron.ipcRenderer.invoke('move-file', {
+                sourcePath: filePath,
+                destFolder: newCategory,
+                propertyName: currentProperty.name
+            });
+
+            if (res.success) {
+                await window.electron.ipcRenderer.invoke('save-manual-override', {
+                    filePath: res.newPath,
+                    category: newCategory,
+                    comment: 'User correction'
+                });
+                alert('File re-categorized successfully!');
+                loadFolderBrowser();
+            } else {
+                alert('Failed to move file: ' + res.error);
+            }
+        }
+
+        async function loadPropertyHistory() {
+            const timeline = document.getElementById('property-history-list');
+            timeline.innerHTML = '<div style="color: var(--text-secondary)">Scanning timeline...</div>';
+            
+            try {
+                const history = await window.electron.ipcRenderer.invoke('get-property-history', currentProperty.id);
+                
+                if (!history || history.length === 0) {
+                    timeline.innerHTML = '<div style="color: var(--text-secondary); padding: 20px;">No historical events recorded.</div>';
+                    return;
+                }
+
+                // Filter out noisy pipeline/ingestion logs
+                const meaningfulHistory = history.filter(h => 
+                    !h.event_type.startsWith('PIPELINE_') && 
+                    !h.event_type.startsWith('FILE_INGESTED') &&
+                    h.description !== 'Property Purchased' // Avoid duplicate purchase entry if already handled
+                );
+
+                timeline.innerHTML = meaningfulHistory.map(h => {
+                    const isMilestone = h.event_type === 'MILESTONE' || h.event_type === 'LEGAL_MILESTONE';
+                    // ... rest of mapping
+                    const color = isMilestone ? 'var(--accent-green)' : (h.event_type === 'FILE_INGESTED' ? 'var(--accent-blue)' : 'rgba(255,255,255,0.2)');
+                    
+                    return `
+                        <div class="pipeline-card" style="border-left: 4px solid ${color};">
+                            <div style="font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-bottom: 4px;">
+                                ${new Date(h.event_date).toLocaleDateString()}
+                            </div>
+                            <div style="font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+                                ${isMilestone ? '⭐' : (h.event_type === 'FILE_INGESTED' ? '📄' : 'ℹ️')}
+                                ${h.event_type.replace(/_/g, ' ')}
+                            </div>
+                            <div style="font-size: 14px; color: #fff;">${h.description}</div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) {
+                timeline.innerHTML = `<div style="color: var(--accent-red)">Failed to load property history.</div>`;
+            }
+        }
+
+        async function openFile(filePath) {
+            await window.electron.ipcRenderer.invoke('open-file-path', filePath);
+        }
+
+        
+        async function resetApp() {
+            if (!confirm('⚠️ WARNING: This will DELETE ALL DATA from the database and restart the app. Continue?')) return;
+            if (!confirm('Are you ABSOLUTELY SURE? This cannot be undone!')) return;
+            
+            const res = await window.electron.ipcRenderer.invoke('reset-database');
+            // App will relaunch automatically
+        }
+
+        async function syncData() {
+            document.getElementById('sync-status').innerText = 'Initializing...';
+            await window.electron.ipcRenderer.invoke('collect-data');
+        }
+
+        // IPC Listeners
+        window.electron.ipcRenderer.on('ingestion-progress', (progress) => {
+            console.log('Progress Update:', progress);
+            const statusBox = document.getElementById('sync-status');
+            
+            if (progress.type === 'PROPERTY_START') {
+                statusBox.innerText = `Syncing: ${progress.property}`;
+                statusBox.style.color = 'var(--accent-orange)';
+                
+                // If we are currently viewing this property detail, show a progress bar
+                if (currentProperty && currentProperty.name === progress.property) {
+                    const pipeline = document.getElementById('property-pipeline-container');
+                    pipeline.innerHTML = `
+                        <div class="pipeline-card">
+                            <div style="font-weight: 700;">LIVE: Metadata Ingestion</div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: 50%"></div>
+                            </div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">Analyzing taxonomy for ${progress.property}...</div>
+                        </div>
+                    ` + pipeline.innerHTML;
+                }
+            }
+        });
+
+        window.electron.ipcRenderer.on('ingestion-status', (event, data) => {
+            document.getElementById('sync-status').innerText = data.status === 'complete' ? 'Sync Ideal' : 'Sync Error';
+            document.getElementById('sync-status').style.color = data.status === 'complete' ? 'var(--accent-green)' : 'var(--accent-red)';
+            if (data.status === 'complete') loadDashboard();
+        });
+
+        // Initial Load
+        loadDashboard();
+    </script>
+</body>
+</html>
