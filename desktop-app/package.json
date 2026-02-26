@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "productName": "Property Management",
   "description": "Property Management Desktop Application",
+  "author": "Sensible Analytics",
   "main": "src/main/index.js",
   "scripts": {
     "start": "electron .",
@@ -42,7 +43,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.42.1",
-    "electron": "^29.1.1",
+    "electron": "29.1.1",
     "electron-builder": "^26.8.1",
     "electron-rebuild": "^3.2.9",
     "vitest": "^1.4.0"
