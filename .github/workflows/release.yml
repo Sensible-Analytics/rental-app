@@ -26,6 +26,7 @@ jobs:
 
       - name: Build
         run: |
+         yarn install
          npm install -g @yao-pkg/pkg
          yarn workspaces focus @rental-app/cli
          pkg cli/package.json --compress Brotli --output mre
