@@ -112,7 +112,7 @@ All notable changes to this project will be documented here.
 
 ### Added
 
-- Completed implementation of tenant app phase 1 [#118](https://github.com/microrealestate/microrealestate/issues/118). Tenant contact emails set in the landlord app are now used to sign in into the tenant app.
+- Completed implementation of tenant app phase 1 [#118](https://github.com/rentro/rentro/issues/118). Tenant contact emails set in the landlord app are now used to sign in into the tenant app.
 
 - Added `configure` option to the cli to run prompts to generate the .env file even if it already exists. This will not overwrite the existing tokens and secrets already set in the .env file.
 

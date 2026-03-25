@@ -106,7 +106,7 @@ jobs:
       - name: Build linux cli
         run: |
           npm install -g @yao-pkg/pkg
-          yarn workspaces focus @rental-app/cli
+          yarn workspaces focus @rentro/cli
           pkg cli/package.json --targets node20-linux-x64 --compress Brotli --output mre
 
       - name: Copy files to remote server
@@ -116,7 +116,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           source: 'base.env,docker-compose.microservices.base.yml,docker-compose.microservices.test.yml,mre'
-          target: rental-app_ci
+          target: rentro_ci
 
       - name: Start mre on remote server
         uses: appleboy/ssh-action@v1.0.3
@@ -125,10 +125,10 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            cd rental-app_ci
-            docker stop $(docker ps -qf "network=rental-app_ci_net")
-            docker rm $(docker ps -qf "network=rental-app_ci_net") 
-            docker rmi $(docker images --filter=reference="ghcr.io/rental-app/rental-app/*:${{ github.sha }}" -q)
+            cd rentro_ci
+            docker stop $(docker ps -qf "network=rentro_ci_net")
+            docker rm $(docker ps -qf "network=rentro_ci_net") 
+            docker rmi $(docker images --filter=reference="ghcr.io/rentro/rentro/*:${{ github.sha }}" -q)
             docker system prune -f
             MRE_VERSION=${{ github.sha }} ./mre ci
 

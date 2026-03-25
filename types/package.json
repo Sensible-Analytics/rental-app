@@ -1,8 +1,8 @@
 {
-  "name": "@microrealestate/types",
+  "name": "@rentro/types",
   "version": "1.0.0",
   "description": "Typescript types for the MicroRealEstate application'",
-  "author": "Camel Aissani",
+  "author": "Sensible Analytics",
   "license": "MIT",
   "type": "module",
   "private": true,

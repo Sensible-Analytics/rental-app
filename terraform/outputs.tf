@@ -1,5 +1,5 @@
 output "instance_public_ip" {
-  value = oci_core_instance.mre_instance.public_ip
+  value = oci_core_instance.rentro_instance.public_ip
 }
 
 output "tenancy_ocid" {

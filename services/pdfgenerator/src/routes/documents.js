@@ -7,7 +7,7 @@ import {
   Middlewares,
   Service,
   ServiceError
-} from '@microrealestate/common';
+} from '@rentro/common';
 import express from 'express';
 import fs from 'fs-extra';
 import Handlebars from 'handlebars';

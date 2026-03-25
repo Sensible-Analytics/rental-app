@@ -8,7 +8,7 @@ import {
   getT
 } from '@/utils/i18n/common';
 import type { LocalizedMessages, TFunction } from '@/types';
-import { Locale } from '@microrealestate/types';
+import { Locale } from '@rentro/types';
 import { usePathname } from 'next/navigation';
 
 export const LocaleContext = createContext<{

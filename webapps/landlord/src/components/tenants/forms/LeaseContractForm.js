@@ -6,7 +6,7 @@ import {
   SelectField,
   SubmitButton,
   TextField
-} from '@microrealestate/commonui/components';
+} from '@rentro/commonui/components';
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik';
 import {
   Fragment,

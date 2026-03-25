@@ -28,7 +28,7 @@ jobs:
         run: |
          yarn install
          npm install -g @yao-pkg/pkg
-         yarn workspaces focus @microrealestate/cli
+         yarn workspaces focus @rentro/cli
          pkg cli/package.json --compress Brotli --output mre
          mv mre-linux mre
          mv mre-win.exe mre.exe
@@ -71,15 +71,15 @@ jobs:
 
       - name: Build Mac Desktop App
         if: matrix.os == 'macos-latest'
-        run: yarn workspace @microrealestate/desktop-app build:mac
+        run: yarn workspace @rentro/desktop-app build:mac
 
       - name: Build Windows Desktop App
         if: matrix.os == 'windows-latest'
-        run: yarn workspace @microrealestate/desktop-app build:win
+        run: yarn workspace @rentro/desktop-app build:win
 
       - name: Build Linux Desktop App
         if: matrix.os == 'ubuntu-latest'
-        run: yarn workspace @microrealestate/desktop-app build:linux
+        run: yarn workspace @rentro/desktop-app build:linux
 
       - name: Upload Desktop App Release Assets
         uses: softprops/action-gh-release@v1

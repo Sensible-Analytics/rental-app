@@ -1,4 +1,4 @@
-import { Collections } from '@microrealestate/common';
+import { Collections } from '@rentro/common';
 import moment from 'moment';
 
 export async function getFinance(req, res) {

@@ -1,4 +1,4 @@
-import { Crypto, Service } from '@microrealestate/common';
+import { Crypto, Service } from '@rentro/common';
 import mailgun from 'nodemailer-mailgun-transport';
 import nodemailer from 'nodemailer';
 

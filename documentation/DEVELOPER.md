@@ -1,4 +1,4 @@
-# Microrealestate
+# Rentro
 
 Here is a diagram showcasing the microservices on the backend and the two frontend applications:
 
@@ -29,8 +29,8 @@ Here is a diagram showcasing the microservices on the backend and the two fronte
 #### Clone the GitHub repository
 
 ```shell
-git clone https://github.com/microrealestate/microrealestate.git
-cd microrealestate
+git clone https://github.com/rentro/rentro.git
+cd rentro
 ```
 
 #### Install de application dependencies

@@ -1,5 +1,5 @@
 {
-  "name": "@microrealestate/desktop-app",
+  "name": "@rentro/desktop-app",
   "version": "1.0.0",
   "productName": "Property Management",
   "description": "Property Management Desktop Application",
@@ -17,8 +17,8 @@
     "build:linux": "electron-builder --linux"
   },
   "build": {
-    "appId": "com.microrealestate.desktop",
-    "productName": "RentalApp",
+    "appId": "com.rentro.desktop",
+    "productName": "Rentro",
     "directories": {
       "output": "dist"
     },

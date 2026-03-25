@@ -1,8 +1,8 @@
 {
-  "name": "@microrealestate/tenantapi",
+  "name": "@rentro/tenantapi",
   "version": "1.0.0",
   "description": "Api for tenant user interface",
-  "author": "Camel Aissani",
+  "author": "Sensible Analytics",
   "license": "MIT",
   "type": "module",
   "private": true,
@@ -27,11 +27,11 @@
     "format": "prettier --write '**/*.{js,jsx,ts,tsx,json,css}'"
   },
   "dependencies": {
-    "@microrealestate/common": "*",
+    "@rentro/common": "*",
     "moment": "2.29.4"
   },
   "devDependencies": {
-    "@microrealestate/types": "*",
+    "@rentro/types": "*",
     "@typescript-eslint/eslint-plugin": "7.15.0",
     "@typescript-eslint/parser": "7.15.0",
     "eslint": "8.57.0",

@@ -4,7 +4,7 @@ import {
   Locale,
   PaymentMethod,
   PaymentStatus
-} from '@microrealestate/types';
+} from '@rentro/types';
 
 type LocalizedMessages = Record<
   string,

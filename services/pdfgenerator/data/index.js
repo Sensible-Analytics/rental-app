@@ -1,4 +1,4 @@
-import { Collections, logger } from '@microrealestate/common';
+import { Collections, logger } from '@rentro/common';
 import moment from 'moment';
 
 export async function getRentsData(params) {

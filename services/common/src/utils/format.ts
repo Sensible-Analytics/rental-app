@@ -1,4 +1,4 @@
-import { Locale } from '@microrealestate/types';
+import { Locale } from '@rentro/types';
 
 export function formatNumber(
   locale: Locale,

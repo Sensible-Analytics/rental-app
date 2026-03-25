@@ -42,31 +42,31 @@ jobs:
       matrix:
         include:
           - appname: gateway
-            image: ghcr.io/sensible-analytics/rental-app/gateway
+            image: ghcr.io/sensible-analytics/rentro/gateway
             dockerfile: services/gateway/Dockerfile
           - appname: api
-            image: ghcr.io/sensible-analytics/rental-app/api
+            image: ghcr.io/sensible-analytics/rentro/api
             dockerfile: services/api/Dockerfile
           - appname: tenantapi
-            image: ghcr.io/sensible-analytics/rental-app/tenantapi
+            image: ghcr.io/sensible-analytics/rentro/tenantapi
             dockerfile: services/tenantapi/Dockerfile
           - appname: authenticator
-            image: ghcr.io/sensible-analytics/rental-app/authenticator
+            image: ghcr.io/sensible-analytics/rentro/authenticator
             dockerfile: services/authenticator/Dockerfile
           - appname: pdfgenerator
-            image: ghcr.io/sensible-analytics/rental-app/pdfgenerator
+            image: ghcr.io/sensible-analytics/rentro/pdfgenerator
             dockerfile: services/pdfgenerator/Dockerfile
           - appname: emailer
-            image: ghcr.io/sensible-analytics/rental-app/emailer
+            image: ghcr.io/sensible-analytics/rentro/emailer
             dockerfile: services/emailer/Dockerfile
           - appname: resetservice
-            image: ghcr.io/sensible-analytics/rental-app/resetservice
+            image: ghcr.io/sensible-analytics/rentro/resetservice
             dockerfile: services/resetservice/Dockerfile
           - appname: landlord-frontend
-            image: ghcr.io/sensible-analytics/rental-app/landlord-frontend
+            image: ghcr.io/sensible-analytics/rentro/landlord-frontend
             dockerfile: webapps/landlord/Dockerfile
           - appname: tenant-frontend
-            image: ghcr.io/sensible-analytics/rental-app/tenant-frontend
+            image: ghcr.io/sensible-analytics/rentro/tenant-frontend
             dockerfile: webapps/tenant/Dockerfile
 
     steps:

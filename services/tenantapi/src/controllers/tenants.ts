@@ -1,11 +1,11 @@
 import * as Express from 'express';
-import { Collections, logger, ServiceError } from '@microrealestate/common';
+import { Collections, logger, ServiceError } from '@rentro/common';
 import {
   CollectionTypes,
   MongooseDocument,
   TenantAPI,
   UserServicePrincipal
-} from '@microrealestate/types';
+} from '@rentro/types';
 import moment from 'moment';
 
 export async function getOneTenant(

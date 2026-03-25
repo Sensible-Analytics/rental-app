@@ -5,7 +5,7 @@ import {
   NumberField,
   SubmitButton,
   TextField
-} from '@microrealestate/commonui/components';
+} from '@rentro/commonui/components';
 import { useContext, useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Section } from '../../formfields/Section';

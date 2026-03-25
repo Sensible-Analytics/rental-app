@@ -3,7 +3,7 @@ import {
   Crypto,
   logger,
   ServiceError
-} from '@microrealestate/common';
+} from '@rentro/common';
 
 const SECRET_PLACEHOLDER = '**********';
 

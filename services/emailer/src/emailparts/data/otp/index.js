@@ -1,4 +1,4 @@
-import { Collections } from '@microrealestate/common';
+import { Collections } from '@rentro/common';
 
 export async function get(email, params) {
   // Get the first landlord that has the email in the contacts

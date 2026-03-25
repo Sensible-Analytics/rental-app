@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import { isClient, isServer } from '@microrealestate/commonui/utils';
+import { isClient, isServer } from '@rentro/commonui/utils';
 
 import config from '../config';
 import { enableStaticRendering } from 'mobx-react-lite';

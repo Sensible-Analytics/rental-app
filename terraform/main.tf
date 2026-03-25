@@ -6,39 +6,39 @@ provider "oci" {
   region           = var.region
 }
 
-resource "oci_core_vcn" "mre_vcn" {
+resource "oci_core_vcn" "rentro_vcn" {
   compartment_id = var.compartment_ocid
   cidr_block     = "10.0.0.0/16"
-  display_name   = "mre_vcn"
-  dns_label      = "mrevcn"
+  display_name   = "rentro_vcn"
+  dns_label      = "rentrovcn"
 }
 
-resource "oci_core_subnet" "mre_subnet" {
+resource "oci_core_subnet" "rentro_subnet" {
   compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_vcn.mre_vcn.id
+  vcn_id         = oci_core_vcn.rentro_vcn.id
   cidr_block     = "10.0.1.0/24"
-  display_name   = "mre_subnet"
-  dns_label      = "mresubnet"
-  route_table_id = oci_core_vcn.mre_vcn.default_route_table_id
+  display_name   = "rentro_subnet"
+  dns_label      = "rentrosubnet"
+  route_table_id = oci_core_vcn.rentro_vcn.default_route_table_id
 }
 
-resource "oci_core_default_route_table" "mre_route_table" {
-  manage_default_resource_id = oci_core_vcn.mre_vcn.default_route_table_id
+resource "oci_core_default_route_table" "rentro_route_table" {
+  manage_default_resource_id = oci_core_vcn.rentro_vcn.default_route_table_id
   route_rules {
     destination       = "0.0.0.0/0"
     destination_type  = "CIDR_BLOCK"
-    network_entity_id = oci_core_internet_gateway.mre_internet_gateway.id
+    network_entity_id = oci_core_internet_gateway.rentro_internet_gateway.id
   }
 }
 
-resource "oci_core_internet_gateway" "mre_internet_gateway" {
+resource "oci_core_internet_gateway" "rentro_internet_gateway" {
   compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_vcn.mre_vcn.id
-  display_name   = "mre_gateway"
+  vcn_id         = oci_core_vcn.rentro_vcn.id
+  display_name   = "rentro_gateway"
 }
 
-resource "oci_core_default_security_list" "mre_security_list" {
-  manage_default_resource_id = oci_core_vcn.mre_vcn.default_security_list_id
+resource "oci_core_default_security_list" "rentro_security_list" {
+  manage_default_resource_id = oci_core_vcn.rentro_vcn.default_security_list_id
 
   ingress_security_rules {
     protocol = "6" # TCP
@@ -82,17 +82,17 @@ resource "oci_core_default_security_list" "mre_security_list" {
   }
 }
 
-resource "oci_core_instance" "mre_instance" {
+resource "oci_core_instance" "rentro_instance" {
   availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
   compartment_id      = var.compartment_ocid
-  display_name        = "rental-app-instance"
+  display_name        = "rentro-instance"
   shape               = "VM.Standard.E2.1.Micro"
 
   create_vnic_details {
-    subnet_id        = oci_core_subnet.mre_subnet.id
+    subnet_id        = oci_core_subnet.rentro_subnet.id
     display_name     = "primaryvnic"
     assign_public_ip = true
-    hostname_label   = "mre-instance"
+    hostname_label   = "rentro-instance"
   }
 
   source_details {

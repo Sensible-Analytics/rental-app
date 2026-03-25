@@ -1,8 +1,8 @@
 {
-  "name": "@microrealestate/commonui",
+  "name": "@rentro/commonui",
   "version": "1.0.0",
   "description": "Common modules required for the MicroRealEstate application'",
-  "author": "Camel Aissani",
+  "author": "Sensible Analytics",
   "license": "MIT",
   "private": true,
   "dependencies": {

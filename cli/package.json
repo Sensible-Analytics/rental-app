@@ -1,5 +1,5 @@
 {
-  "name": "@microrealestate/cli",
+  "name": "@rentro/cli",
   "version": "1.0.0",
   "description": "The MicroRealEstate CLI",
   "main": "src/index.js",
@@ -20,7 +20,7 @@
       "node20-win-x64"
     ]
   },
-  "author": "Camel Aissani",
+  "author": "Sensible Analytics",
   "license": "MIT",
   "dependencies": {
     "chalk": "4.1.2",

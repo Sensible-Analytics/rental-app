@@ -7,7 +7,7 @@ import * as propertyManager from './managers/propertymanager.js';
 import * as realmManager from './managers/realmmanager.js';
 import * as rentManager from './managers/rentmanager.js';
 import * as integrationManager from './managers/integrationmanager.js';
-import { Middlewares, Service } from '@microrealestate/common';
+import { Middlewares, Service } from '@rentro/common';
 import express from 'express';
 
 export default function routes() {

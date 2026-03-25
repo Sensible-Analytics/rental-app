@@ -1,5 +1,5 @@
 import * as crypto from 'crypto';
-import { EnvironmentValues } from '@microrealestate/types';
+import { EnvironmentValues } from '@rentro/types';
 import Service from './service.js';
 
 function _buildIV(config: EnvironmentValues) {

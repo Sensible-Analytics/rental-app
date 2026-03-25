@@ -1,27 +1,27 @@
-# rental-app
+# rentro
 
-[![Continuous Integration](https://github.com/Sensible-Analytics/rental-app/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/Sensible-Analytics/rental-app/actions/workflows/ci.yml)
+[![Continuous Integration](https://github.com/Sensible-Analytics/rentro/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/Sensible-Analytics/rentro/actions/workflows/ci.yml)
 
-RentalApp is a free, easy-to-use desktop application designed to help landlords manage their properties and rentals without the hassle. It serves as a single place for you to keep track of your properties, tenants, leases, and rent payments.
+Rentro is a free, easy-to-use desktop application designed to help landlords manage their properties and rentals without the hassle. It serves as a single place for you to keep track of your properties, tenants, leases, and rent payments.
 
 ## Getting Started (Desktop App)
 
-The easiest way to use RentalApp is to download the ready-made desktop application for your computer.
+The easiest way to use Rentro is to download the ready-made desktop application for your computer.
 
-1. Go to the [Releases page](https://github.com/Sensible-Analytics/rental-app/releases).
+1. Go to the [Releases page](https://github.com/Sensible-Analytics/rentro/releases).
 2. Download the version for your operating system (e.g., `.exe` for Windows, `.dmg` for Mac, `.AppImage` for Linux).
 3. Install and run the application. No complex setup or servers required!
 ## Key Features
 
-- Centralized Property and Tenant Information: RentalApp allows landlords to store all property and tenant details in one convenient location. From property specifications to tenant records and contact information.
+- Centralized Property and Tenant Information: Rentro allows landlords to store all property and tenant details in one convenient location. From property specifications to tenant records and contact information.
 
-- Rent Lease Creation: RentalApp simplifies the process of creating rent leases. It offers customizable templates that enable landlords to generate lease.
+- Rent Lease Creation: Rentro simplifies the process of creating rent leases. It offers customizable templates that enable landlords to generate lease.
 
-- Rent Payment Tracking: RentalApp provides a comprehensive system for tracking rent payments, helping landlords stay updated on transactions and promptly address any overdue payments.
+- Rent Payment Tracking: Rentro provides a comprehensive system for tracking rent payments, helping landlords stay updated on transactions and promptly address any overdue payments.
 
-- Custom Document Generation: RentalApp allows landlords to create custom documents for effective communication with tenants. Personalized letters, notices, and announcements can be generated to ensure clear and consistent correspondence.
+- Custom Document Generation: Rentro allows landlords to create custom documents for effective communication with tenants. Personalized letters, notices, and announcements can be generated to ensure clear and consistent correspondence.
 
-- Collaboration: Whether you are an independent landlord or manage a real estate business with multiple collaborators, RentalApp supports collaboration and facilitates task coordination within teams.
+- Collaboration: Whether you are an independent landlord or manage a real estate business with multiple collaborators, Rentro supports collaboration and facilitates task coordination within teams.
 
 ## Screenshots
 
@@ -49,8 +49,8 @@ The easiest way to use RentalApp is to download the ready-made desktop applicati
 ``` shell
 mkdir mre
 cd mre
-curl https://raw.githubusercontent.com/rental-app/rental-app/master/docker-compose.yml > docker-compose.yml
-curl https://raw.githubusercontent.com/rental-app/rental-app/master/.env.domain > .env
+curl https://raw.githubusercontent.com/rentro/rentro/master/docker-compose.yml > docker-compose.yml
+curl https://raw.githubusercontent.com/rentro/rentro/master/.env.domain > .env
 ```
 
 Update the secrets and tokens in the `.env` file (at the end of the file).
@@ -134,7 +134,7 @@ To run the application in development mode, follow the steps outlined in the doc
 
 ## Donate
 
-Thank you for your interest in supporting RentalApp.
+Thank you for your interest in supporting Rentro.
 Every contribution will help us pay our ongoing maintenance and development costs 🙏
 
 [![Donate](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub)](https://github.com/sponsors/camelaissani)

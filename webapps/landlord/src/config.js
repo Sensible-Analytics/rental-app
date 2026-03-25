@@ -1,4 +1,4 @@
-import { env } from '@microrealestate/commonui/utils';
+import { env } from '@rentro/commonui/utils';
 
 const config = {
   APP_NAME: env('APP_NAME'),

@@ -1,5 +1,5 @@
 {
-  "name": "@microrealestate/pdfgenerator",
+  "name": "@rentro/pdfgenerator",
   "version": "1.0.0",
   "description": "Generates PDF documents (letters, contracts, invoices...)",
   "main": "./src/index.js",
@@ -24,15 +24,15 @@
     "format": "prettier --write '**/*.{js,jsx,ts,tsx,json,css}'"
   },
   "keywords": [
-    "microrealestate",
+    "rentro",
     "realestate",
     "document",
     "pdf"
   ],
-  "author": "Camel Aissani",
+  "author": "Sensible Analytics",
   "license": "MIT",
   "dependencies": {
-    "@microrealestate/common": "*",
+    "@rentro/common": "*",
     "async-mutex": "0.5.0",
     "aws-sdk": "2.1677.0",
     "ejs": "3.1.10",

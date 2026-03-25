@@ -1,4 +1,4 @@
-![Docker](https://github.com/microrealestate/pdfgenerator/workflows/Docker/badge.svg)
+![Docker](https://github.com/rentro/pdfgenerator/workflows/Docker/badge.svg)
 
 # pdfgenerator
 Generates PDF documents (letters, contracts, invoices...)

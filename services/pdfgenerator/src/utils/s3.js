@@ -1,4 +1,4 @@
-import { Crypto, logger } from '@microrealestate/common';
+import { Crypto, logger } from '@rentro/common';
 import AWS from 'aws-sdk';
 import fs from 'fs-extra';
 

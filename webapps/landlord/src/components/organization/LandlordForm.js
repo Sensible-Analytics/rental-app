@@ -13,7 +13,7 @@ import {
   SelectField,
   SubmitButton,
   TextField
-} from '@microrealestate/commonui/components';
+} from '@rentro/commonui/components';
 import { useCallback, useContext, useMemo } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import cc from 'currency-codes';

@@ -120,7 +120,7 @@ Functions with highest complexity (consider refactoring):
 
 ## Domain Keywords
 
-- **Package:** rental-app
+- **Package:** rentro
 - **Description:** The application which helps the landlords to manage their property rents.
 - **Top domain terms:** property, tenant, illustration, document, rent, organization, file, tenants, status, settings, one, keys, lease, pagination, main, number, values, locale, sign, contract
 

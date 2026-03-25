@@ -50,7 +50,7 @@ services:
   ###############################################################################
   gateway:
     restart: unless-stopped
-    image: 'ghcr.io/sensible-analytics/rental-app/gateway:${MRE_VERSION:-latest}'
+    image: 'ghcr.io/sensible-analytics/rentro/gateway:${MRE_VERSION:-latest}'
     environment:
       NODE_ENV: production
       LOGGER_LEVEL: info
@@ -92,7 +92,7 @@ services:
   ###############################################################################
   authenticator:
     restart: unless-stopped
-    image: 'ghcr.io/sensible-analytics/rental-app/authenticator:${MRE_VERSION:-latest}'
+    image: 'ghcr.io/sensible-analytics/rentro/authenticator:${MRE_VERSION:-latest}'
     environment:
       NODE_ENV: production
       PORT: 8000
@@ -129,7 +129,7 @@ services:
   ###############################################################################
   pdfgenerator:
     restart: unless-stopped
-    image: 'ghcr.io/sensible-analytics/rental-app/pdfgenerator:${MRE_VERSION:-latest}'
+    image: 'ghcr.io/sensible-analytics/rentro/pdfgenerator:${MRE_VERSION:-latest}'
     environment:
       NODE_ENV: production
       PORT: 8300
@@ -151,7 +151,7 @@ services:
   ###############################################################################
   emailer:
     restart: unless-stopped
-    image: 'ghcr.io/sensible-analytics/rental-app/emailer:${MRE_VERSION:-latest}'
+    image: 'ghcr.io/sensible-analytics/rentro/emailer:${MRE_VERSION:-latest}'
     environment:
       NODE_ENV: production
       ALLOW_SENDING_EMAILS: 'true'
@@ -203,7 +203,7 @@ services:
   ###############################################################################
   api:
     restart: unless-stopped
-    image: 'ghcr.io/sensible-analytics/rental-app/api:${MRE_VERSION:-latest}'
+    image: 'ghcr.io/sensible-analytics/rentro/api:${MRE_VERSION:-latest}'
     volumes:
       - ./backup:/usr/app/backup
     environment:
@@ -238,7 +238,7 @@ services:
   ###############################################################################
   tenantapi:
     restart: unless-stopped
-    image: 'ghcr.io/sensible-analytics/rental-app/tenantapi:${MRE_VERSION:-latest}'
+    image: 'ghcr.io/sensible-analytics/rentro/tenantapi:${MRE_VERSION:-latest}'
     environment:
       NODE_ENV: production
       PORT: 8250
@@ -257,7 +257,7 @@ services:
   ###############################################################################
   landlord-frontend:
     restart: unless-stopped
-    image: 'ghcr.io/sensible-analytics/rental-app/landlord-frontend:${MRE_VERSION:-latest}'
+    image: 'ghcr.io/sensible-analytics/rentro/landlord-frontend:${MRE_VERSION:-latest}'
     environment:
       BASE_PATH: /landlord
       PORT: 8180
@@ -278,7 +278,7 @@ services:
   ###############################################################################
   tenant-frontend:
     restart: unless-stopped
-    image: 'ghcr.io/sensible-analytics/rental-app/tenant-frontend:${MRE_VERSION:-latest}'
+    image: 'ghcr.io/sensible-analytics/rentro/tenant-frontend:${MRE_VERSION:-latest}'
     environment:
       BASE_PATH: /tenant
       PORT: 8190
