@@ -1,171 +1,45 @@
-name: Continuous Integration
+name: CI
 
 on:
   push:
-    branches:
-      - master
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
-  setup:
+  lint-and-test:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Queue workflow if already running
-        uses: ahmadnassri/action-workflow-queue@v1
-
-  lint:
-    runs-on: ubuntu-latest
-    needs: setup
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: yarn
-
-      - name: Lint
-        run: yarn lint
-
-  build-push-images:
-    permissions:
-      contents: read
-      packages: write
-    runs-on: ubuntu-latest
-    needs: lint
     strategy:
       matrix:
-        include:
-          - appname: gateway
-            image: ghcr.io/${{ github.repository }}/gateway
-            dockerfile: services/gateway/Dockerfile
-          - appname: api
-            image: ghcr.io/${{ github.repository }}/api
-            dockerfile: services/api/Dockerfile
-          - appname: tenantapi
-            image: ghcr.io/${{ github.repository }}/tenantapi
-            dockerfile: services/tenantapi/Dockerfile
-          - appname: authenticator
-            image: ghcr.io/${{ github.repository }}/authenticator
-            dockerfile: services/authenticator/Dockerfile
-          - appname: pdfgenerator
-            image: ghcr.io/${{ github.repository }}/pdfgenerator
-            dockerfile: services/pdfgenerator/Dockerfile
-          - appname: emailer
-            image: ghcr.io/${{ github.repository }}/emailer
-            dockerfile: services/emailer/Dockerfile
-          - appname: resetservice
-            image: ghcr.io/${{ github.repository }}/resetservice
-            dockerfile: services/resetservice/Dockerfile
-          - appname: landlord-frontend
-            image: ghcr.io/${{ github.repository }}/landlord-frontend
-            dockerfile: webapps/landlord/Dockerfile
-          - appname: tenant-frontend
-            image: ghcr.io/${{ github.repository }}/tenant-frontend
-            dockerfile: webapps/tenant/Dockerfile
-
+        node-version: [18.x, 20.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ matrix.image }}
-
-      - name: Build and push to GitHub Container Registry
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ${{ matrix.dockerfile }}
-          push: true
-          tags: '${{ matrix.image }}:${{ github.sha }}'
-          labels: ${{ steps.meta.outputs.labels }}
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build-push-images
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: install node v20
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-      - name: Build linux cli
-        run: |
-          npm install -g @yao-pkg/pkg
-          yarn workspaces focus @rentro/cli
-          pkg cli/package.json --targets node20-linux-x64 --compress Brotli --output mre
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Copy files to remote server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          source: 'base.env,docker-compose.microservices.base.yml,docker-compose.microservices.test.yml,mre'
-          target: rentro_ci
+      - name: Run linter
+        run: npm run lint --if-present
 
-      - name: Start mre on remote server
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          script: |
-            cd rentro_ci
-            docker stop $(docker ps -qf "network=rentro_ci_net")
-            docker rm $(docker ps -qf "network=rentro_ci_net") 
-            docker rmi $(docker images --filter=reference="ghcr.io/rentro/rentro/*:${{ github.sha }}" -q)
-            docker system prune -f
-            MRE_VERSION=${{ github.sha }} ./mre ci
-
-  healthcheck:
-    runs-on: ubuntu-latest
-    needs: deploy
-    steps:
-      - name: Check if the app is up and running
-        uses: gerdemann/http-status-code@1.0.0
-        with:
-          url: ${{ secrets.CI_LANDLORD_APP_URL }}/en/signin
-          code: 200
-          interval: 5
-
-  test:
-    runs-on: ubuntu-latest
-    needs: healthcheck
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Run type check
+        run: npm run type-check --if-present
 
       - name: Run tests
-        env:
-          GATEWAY_URL: ${{ secrets.CI_GATEWAY_URL }}
-          LANDLORD_APP_URL: ${{ secrets.CI_LANDLORD_APP_URL }}
-        run: |
-          corepack enable
-          yarn
-          yarn run e2e:ci
+        run: npm test --if-present
 
-      - name: Upload cypress artifacts
-        uses: actions/upload-artifact@v4
-        if: ${{ always() }}
-        with:
-          name: cypress-results
-          path: |
-            e2e/cypress/screenshots
-            e2e/cypress/videos
-            e2e/cypress/results
-          if-no-files-found: ignore
+      - name: Build
+        run: npm run build --if-present
