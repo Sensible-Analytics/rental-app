@@ -1,40 +1,51 @@
-# Project directories and files
-node_modules
-tmp
-/data
-.env*
-!.env.domain
-.vscode/ipch
-deploy-*.sh
-dist
+# AI Agent Files (BLOCKED)
+AGENTS.md
+CLAUDE.md
+SYSTEM_PROMPT.md
+agent-instructions.md
+prompt.md
 
-# Logs
-logs
-*.log
-npm-debug.log*
+# Agent Directories
+.claude/
+.sisyphus/
+.ai/
+.agent/
+opencode/
+openhands/
 
-# test coverage
-coverage
+# Database
+*.db
+sales.db
 
-# Rest client vscode plugin
-*.rest
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+ENV/
+env/
 
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
+# Node
+node_modules/
+dist/
+build/
 
-backup/*
-!backup/demodb.dump
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
 
-webapps/*/public/__ENV.js
+# OS
+.DS_Store
+Thumbs.db
 
-mre-*
-mre
-mre.exe
-mre-macos
-
-cloud_context.json
+# Environment
+.env
+.env.local
+.env.production
+backend/.env
+.vercel
