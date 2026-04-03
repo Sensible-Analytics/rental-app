@@ -4394,7 +4394,7 @@ __metadata:
     "@playwright/test": ^1.42.1
     better-sqlite3: ^9.4.1
     chokidar: ^3.6.0
-    electron: 29.1.1
+    electron: 39.8.4
     electron-builder: ^26.8.1
     electron-rebuild: ^3.2.9
     pdf-parse: ^1.1.1
@@ -6262,12 +6262,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.9.0":
-  version: 20.19.30
-  resolution: "@types/node@npm:20.19.30"
+"@types/node@npm:^22.7.7":
+  version: 22.19.15
+  resolution: "@types/node@npm:22.19.15"
   dependencies:
     undici-types: ~6.21.0
-  checksum: 32e80a104b8fcdcacc52a98f0a197a33fd264325501f9af1653cbe9c07fdb6d11130cb0111c65fd353112e6a5af1e5f106714411b1b252d06f0f58760153a1e3
+  checksum: 6e78cdb6cec95770432aceff75b349610b2a8c6e3b661fa6643afa199e49b2ada081546b74c79f3b1bd922fbf5e1b52f7714f6d9d8d275d2083578821328d33c
   languageName: node
   linkType: hard
 
@@ -9675,16 +9675,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:29.1.1":
-  version: 29.1.1
-  resolution: "electron@npm:29.1.1"
+"electron@npm:39.8.4":
+  version: 39.8.4
+  resolution: "electron@npm:39.8.4"
   dependencies:
     "@electron/get": ^2.0.0
-    "@types/node": ^20.9.0
+    "@types/node": ^22.7.7
     extract-zip: ^2.0.1
   bin:
     electron: cli.js
-  checksum: 4615778c91e1c925b571164744cd9cda2772b73268d1c25f8dc04115eba23ccfd0f84a3b01b8cded25048c08f87996b73998306790af2e6fe8101be9e1d158da
+  checksum: 25f22dac3724e93c2788880f2605ea531e62e1b43595b6476d8423c1ad0dc23902ea7cce061f4d384701614a92f1189cbf4b7c8f7e6d946f7925f1a5b35d0068
   languageName: node
   linkType: hard
 
